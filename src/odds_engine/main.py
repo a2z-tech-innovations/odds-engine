@@ -117,18 +117,68 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
                         await session.rollback()
                         log.error("scheduler.fetch_error", sport_key=sport_key, error=str(exc))
 
+        async def _warm_cache() -> None:
+            """On startup, load the latest enriched snapshots from DB into Redis.
+
+            This avoids a cold cache after a restart without spending API credits.
+            """
+            from odds_engine.repositories.event_repo import EventRepository as ER
+            from odds_engine.schemas.events import EventFilterParams
+
+            async with app.state.session_factory() as session:
+                event_repo = ER(session)
+                odds_repo = OddsRepository(session)
+                publisher = OddsPublisher(_cache_repo)
+
+                db_events = await event_repo.get_many(EventFilterParams(), limit=500)
+                warmed = 0
+                for db_event in db_events:
+                    enriched_snap = await odds_repo.get_latest_enriched(db_event.id)
+                    if enriched_snap is None:
+                        continue
+                    from odds_engine.schemas.enriched import EnrichedEventResponse
+                    enriched = EnrichedEventResponse(
+                        event_id=db_event.external_id,
+                        sport_key=db_event.sport_key,
+                        sport_group=db_event.sport_group,
+                        home_team=db_event.home_team,
+                        away_team=db_event.away_team,
+                        commence_time=db_event.commence_time,
+                        status=db_event.status.value if hasattr(db_event.status, "value") else str(db_event.status),
+                        snapshot_id=enriched_snap.snapshot_id,
+                        fetched_at=enriched_snap.computed_at,
+                        bookmakers={},  # not stored denormalized — consumers use best_line
+                        best_line=enriched_snap.best_line,
+                        consensus=enriched_snap.consensus_line,
+                        vig_free=enriched_snap.vig_free,
+                        movement=enriched_snap.movement,
+                    )
+                    await publisher.publish(enriched)
+                    warmed += 1
+
+            log.info("cache.warmed", events=warmed)
+
+        from apscheduler.triggers.cron import CronTrigger
+
         scheduler = AsyncIOScheduler(timezone="UTC")
         scheduler.add_job(
             _fetch_job,
-            "interval",
-            minutes=settings.pre_match_interval_minutes,
-            id="pre_match_fetch",
+            CronTrigger(
+                hour=settings.fetch_cron_hour,
+                minute=settings.fetch_cron_minute,
+                timezone=settings.fetch_cron_timezone,
+            ),
+            id="daily_fetch",
             max_instances=1,
         )
-        scheduler.add_job(_fetch_job, "date", id="startup_fetch")
+        scheduler.add_job(_warm_cache, "date", id="startup_cache_warm")
         scheduler.start()
         app.state.scheduler = scheduler
-        log.info("scheduler.started", interval_minutes=settings.pre_match_interval_minutes)
+        log.info(
+            "scheduler.started",
+            cron=f"{settings.fetch_cron_minute:02d} {settings.fetch_cron_hour:02d} * * *",
+            timezone=settings.fetch_cron_timezone,
+        )
 
     yield
 

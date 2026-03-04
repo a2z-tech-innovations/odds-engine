@@ -29,11 +29,11 @@ class Settings(BaseSettings):
     monthly_credit_limit: int = 500
     daily_credit_target: int = 16
 
-    # Scheduler
+    # Scheduler — daily fetch at 00:05 America/New_York (handles DST automatically)
     scheduler_enabled: bool = True
-    pre_match_interval_minutes: int = 60
-    live_interval_minutes: int = 10
-    sports_discovery_interval_minutes: int = 60
+    fetch_cron_hour: int = 0
+    fetch_cron_minute: int = 5
+    fetch_cron_timezone: str = "America/New_York"
 
     # Logging
     log_level: str = "INFO"
