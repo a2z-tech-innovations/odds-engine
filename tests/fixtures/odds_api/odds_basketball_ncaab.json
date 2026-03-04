@@ -1,0 +1,1031 @@
+[
+  {
+    "id": "22a27cfcc1c5cf3fe119a3938d9ad8cc",
+    "sport_key": "basketball_ncaab",
+    "sport_title": "NCAAB",
+    "commence_time": "2026-03-03T23:00:00Z",
+    "home_team": "Louisiana Ragin' Cajuns",
+    "away_team": "Georgia St Panthers",
+    "bookmakers": [
+      {
+        "key": "fanduel",
+        "title": "FanDuel",
+        "last_update": "2026-03-04T00:16:59Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2026-03-04T00:16:58Z",
+            "outcomes": [
+              {
+                "name": "Georgia St Panthers",
+                "price": 290
+              },
+              {
+                "name": "Louisiana Ragin' Cajuns",
+                "price": -410
+              }
+            ]
+          },
+          {
+            "key": "spreads",
+            "last_update": "2026-03-04T00:16:58Z",
+            "outcomes": [
+              {
+                "name": "Georgia St Panthers",
+                "price": -125,
+                "point": 5.5
+              },
+              {
+                "name": "Louisiana Ragin' Cajuns",
+                "price": -106,
+                "point": -5.5
+              }
+            ]
+          },
+          {
+            "key": "totals",
+            "last_update": "2026-03-04T00:16:58Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": -108,
+                "point": 148.5
+              },
+              {
+                "name": "Under",
+                "price": -122,
+                "point": 148.5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "draftkings",
+        "title": "DraftKings",
+        "last_update": "2026-03-04T00:16:57Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2026-03-04T00:16:56Z",
+            "outcomes": [
+              {
+                "name": "Georgia St Panthers",
+                "price": 220
+              },
+              {
+                "name": "Louisiana Ragin' Cajuns",
+                "price": -298
+              }
+            ]
+          },
+          {
+            "key": "spreads",
+            "last_update": "2026-03-04T00:16:56Z",
+            "outcomes": [
+              {
+                "name": "Georgia St Panthers",
+                "price": -110,
+                "point": 4.5
+              },
+              {
+                "name": "Louisiana Ragin' Cajuns",
+                "price": -120,
+                "point": -4.5
+              }
+            ]
+          },
+          {
+            "key": "totals",
+            "last_update": "2026-03-04T00:16:56Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": -115,
+                "point": 145.5
+              },
+              {
+                "name": "Under",
+                "price": -115,
+                "point": 145.5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "betmgm",
+        "title": "BetMGM",
+        "last_update": "2026-03-04T00:16:41Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2026-03-04T00:16:41Z",
+            "outcomes": [
+              {
+                "name": "Georgia St Panthers",
+                "price": 210
+              },
+              {
+                "name": "Louisiana Ragin' Cajuns",
+                "price": -275
+              }
+            ]
+          },
+          {
+            "key": "spreads",
+            "last_update": "2026-03-04T00:16:41Z",
+            "outcomes": [
+              {
+                "name": "Georgia St Panthers",
+                "price": -105,
+                "point": 4.5
+              },
+              {
+                "name": "Louisiana Ragin' Cajuns",
+                "price": -125,
+                "point": -4.5
+              }
+            ]
+          },
+          {
+            "key": "totals",
+            "last_update": "2026-03-04T00:16:41Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": -115,
+                "point": 147.5
+              },
+              {
+                "name": "Under",
+                "price": -115,
+                "point": 147.5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "bovada",
+        "title": "Bovada",
+        "last_update": "2026-03-04T00:16:44Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2026-03-04T00:16:44Z",
+            "outcomes": [
+              {
+                "name": "Georgia St Panthers",
+                "price": -120
+              },
+              {
+                "name": "Louisiana Ragin' Cajuns",
+                "price": 100
+              }
+            ]
+          },
+          {
+            "key": "spreads",
+            "last_update": "2026-03-04T00:16:44Z",
+            "outcomes": [
+              {
+                "name": "Georgia St Panthers",
+                "price": -110,
+                "point": -1.5
+              },
+              {
+                "name": "Louisiana Ragin' Cajuns",
+                "price": -110,
+                "point": 1.5
+              }
+            ]
+          },
+          {
+            "key": "totals",
+            "last_update": "2026-03-04T00:16:44Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": -105,
+                "point": 132.0
+              },
+              {
+                "name": "Under",
+                "price": -115,
+                "point": 132.0
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ac6197e1688d3b1bfb26d5a45368c8ef",
+    "sport_key": "basketball_ncaab",
+    "sport_title": "NCAAB",
+    "commence_time": "2026-03-03T23:03:00Z",
+    "home_team": "South Carolina Gamecocks",
+    "away_team": "Tennessee Volunteers",
+    "bookmakers": [
+      {
+        "key": "fanduel",
+        "title": "FanDuel",
+        "last_update": "2026-03-04T00:16:59Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2026-03-04T00:16:58Z",
+            "outcomes": [
+              {
+                "name": "South Carolina Gamecocks",
+                "price": 3500
+              },
+              {
+                "name": "Tennessee Volunteers",
+                "price": -50000
+              }
+            ]
+          },
+          {
+            "key": "spreads",
+            "last_update": "2026-03-04T00:16:58Z",
+            "outcomes": [
+              {
+                "name": "South Carolina Gamecocks",
+                "price": -120,
+                "point": 14.5
+              },
+              {
+                "name": "Tennessee Volunteers",
+                "price": -110,
+                "point": -14.5
+              }
+            ]
+          },
+          {
+            "key": "totals",
+            "last_update": "2026-03-04T00:16:58Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": -106,
+                "point": 141.5
+              },
+              {
+                "name": "Under",
+                "price": -125,
+                "point": 141.5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "draftkings",
+        "title": "DraftKings",
+        "last_update": "2026-03-04T00:16:57Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2026-03-04T00:16:56Z",
+            "outcomes": [
+              {
+                "name": "South Carolina Gamecocks",
+                "price": 4000
+              },
+              {
+                "name": "Tennessee Volunteers",
+                "price": -100000
+              }
+            ]
+          },
+          {
+            "key": "spreads",
+            "last_update": "2026-03-04T00:16:56Z",
+            "outcomes": [
+              {
+                "name": "South Carolina Gamecocks",
+                "price": -120,
+                "point": 14.5
+              },
+              {
+                "name": "Tennessee Volunteers",
+                "price": -110,
+                "point": -14.5
+              }
+            ]
+          },
+          {
+            "key": "totals",
+            "last_update": "2026-03-04T00:16:56Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": -120,
+                "point": 140.5
+              },
+              {
+                "name": "Under",
+                "price": -110,
+                "point": 140.5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "betmgm",
+        "title": "BetMGM",
+        "last_update": "2026-03-04T00:16:41Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2026-03-04T00:16:41Z",
+            "outcomes": [
+              {
+                "name": "South Carolina Gamecocks",
+                "price": 2200
+              },
+              {
+                "name": "Tennessee Volunteers",
+                "price": -10000
+              }
+            ]
+          },
+          {
+            "key": "spreads",
+            "last_update": "2026-03-04T00:16:41Z",
+            "outcomes": [
+              {
+                "name": "South Carolina Gamecocks",
+                "price": -105,
+                "point": 13.5
+              },
+              {
+                "name": "Tennessee Volunteers",
+                "price": -125,
+                "point": -13.5
+              }
+            ]
+          },
+          {
+            "key": "totals",
+            "last_update": "2026-03-04T00:16:41Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": -125,
+                "point": 140.5
+              },
+              {
+                "name": "Under",
+                "price": -105,
+                "point": 140.5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "bovada",
+        "title": "Bovada",
+        "last_update": "2026-03-04T00:16:44Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2026-03-04T00:16:44Z",
+            "outcomes": [
+              {
+                "name": "South Carolina Gamecocks",
+                "price": 375
+              },
+              {
+                "name": "Tennessee Volunteers",
+                "price": -525
+              }
+            ]
+          },
+          {
+            "key": "spreads",
+            "last_update": "2026-03-04T00:16:44Z",
+            "outcomes": [
+              {
+                "name": "South Carolina Gamecocks",
+                "price": -110,
+                "point": 9.5
+              },
+              {
+                "name": "Tennessee Volunteers",
+                "price": -110,
+                "point": -9.5
+              }
+            ]
+          },
+          {
+            "key": "totals",
+            "last_update": "2026-03-04T00:16:44Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": -110,
+                "point": 141.5
+              },
+              {
+                "name": "Under",
+                "price": -110,
+                "point": 141.5
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "451b82f69548237ff6144758d1753d97",
+    "sport_key": "basketball_ncaab",
+    "sport_title": "NCAAB",
+    "commence_time": "2026-03-03T23:04:30Z",
+    "home_team": "Maine Black Bears",
+    "away_team": "UMass Lowell River Hawks",
+    "bookmakers": [
+      {
+        "key": "fanduel",
+        "title": "FanDuel",
+        "last_update": "2026-03-04T00:16:59Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2026-03-04T00:16:58Z",
+            "outcomes": [
+              {
+                "name": "Maine Black Bears",
+                "price": 320
+              },
+              {
+                "name": "UMass Lowell River Hawks",
+                "price": -460
+              }
+            ]
+          },
+          {
+            "key": "spreads",
+            "last_update": "2026-03-04T00:16:58Z",
+            "outcomes": [
+              {
+                "name": "Maine Black Bears",
+                "price": -114,
+                "point": 5.5
+              },
+              {
+                "name": "UMass Lowell River Hawks",
+                "price": -114,
+                "point": -5.5
+              }
+            ]
+          },
+          {
+            "key": "totals",
+            "last_update": "2026-03-04T00:16:58Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": -114,
+                "point": 134.5
+              },
+              {
+                "name": "Under",
+                "price": -114,
+                "point": 134.5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "draftkings",
+        "title": "DraftKings",
+        "last_update": "2026-03-04T00:16:57Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2026-03-04T00:16:56Z",
+            "outcomes": [
+              {
+                "name": "Maine Black Bears",
+                "price": 600
+              },
+              {
+                "name": "UMass Lowell River Hawks",
+                "price": -1050
+              }
+            ]
+          },
+          {
+            "key": "spreads",
+            "last_update": "2026-03-04T00:16:56Z",
+            "outcomes": [
+              {
+                "name": "Maine Black Bears",
+                "price": -110,
+                "point": 9.5
+              },
+              {
+                "name": "UMass Lowell River Hawks",
+                "price": -120,
+                "point": -9.5
+              }
+            ]
+          },
+          {
+            "key": "totals",
+            "last_update": "2026-03-04T00:16:56Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": -120,
+                "point": 136.5
+              },
+              {
+                "name": "Under",
+                "price": -110,
+                "point": 136.5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "betmgm",
+        "title": "BetMGM",
+        "last_update": "2026-03-04T00:16:41Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2026-03-04T00:16:41Z",
+            "outcomes": [
+              {
+                "name": "Maine Black Bears",
+                "price": 375
+              },
+              {
+                "name": "UMass Lowell River Hawks",
+                "price": -550
+              }
+            ]
+          },
+          {
+            "key": "spreads",
+            "last_update": "2026-03-04T00:16:41Z",
+            "outcomes": [
+              {
+                "name": "Maine Black Bears",
+                "price": -115,
+                "point": 7.5
+              },
+              {
+                "name": "UMass Lowell River Hawks",
+                "price": -115,
+                "point": -7.5
+              }
+            ]
+          },
+          {
+            "key": "totals",
+            "last_update": "2026-03-04T00:16:41Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": -105,
+                "point": 136.5
+              },
+              {
+                "name": "Under",
+                "price": -125,
+                "point": 136.5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "bovada",
+        "title": "Bovada",
+        "last_update": "2026-03-04T00:16:44Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2026-03-04T00:16:44Z",
+            "outcomes": [
+              {
+                "name": "Maine Black Bears",
+                "price": 100
+              },
+              {
+                "name": "UMass Lowell River Hawks",
+                "price": -120
+              }
+            ]
+          },
+          {
+            "key": "spreads",
+            "last_update": "2026-03-04T00:16:44Z",
+            "outcomes": [
+              {
+                "name": "Maine Black Bears",
+                "price": -110,
+                "point": 1.5
+              },
+              {
+                "name": "UMass Lowell River Hawks",
+                "price": -110,
+                "point": -1.5
+              }
+            ]
+          },
+          {
+            "key": "totals",
+            "last_update": "2026-03-04T00:16:44Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": -110,
+                "point": 140.0
+              },
+              {
+                "name": "Under",
+                "price": -110,
+                "point": 140.0
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "838dacb26dd13cbe51d6272eec77b9d7",
+    "sport_key": "basketball_ncaab",
+    "sport_title": "NCAAB",
+    "commence_time": "2026-03-03T23:05:12Z",
+    "home_team": "New Hampshire Wildcats",
+    "away_team": "Bryant Bulldogs",
+    "bookmakers": [
+      {
+        "key": "fanduel",
+        "title": "FanDuel",
+        "last_update": "2026-03-04T00:16:59Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2026-03-04T00:16:58Z",
+            "outcomes": [
+              {
+                "name": "Bryant Bulldogs",
+                "price": -295
+              },
+              {
+                "name": "New Hampshire Wildcats",
+                "price": 220
+              }
+            ]
+          },
+          {
+            "key": "spreads",
+            "last_update": "2026-03-04T00:16:58Z",
+            "outcomes": [
+              {
+                "name": "Bryant Bulldogs",
+                "price": -132,
+                "point": -3.5
+              },
+              {
+                "name": "New Hampshire Wildcats",
+                "price": 100,
+                "point": 3.5
+              }
+            ]
+          },
+          {
+            "key": "totals",
+            "last_update": "2026-03-04T00:16:58Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": -106,
+                "point": 138.5
+              },
+              {
+                "name": "Under",
+                "price": -125,
+                "point": 138.5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "draftkings",
+        "title": "DraftKings",
+        "last_update": "2026-03-04T00:16:57Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2026-03-04T00:16:56Z",
+            "outcomes": [
+              {
+                "name": "Bryant Bulldogs",
+                "price": -375
+              },
+              {
+                "name": "New Hampshire Wildcats",
+                "price": 270
+              }
+            ]
+          },
+          {
+            "key": "spreads",
+            "last_update": "2026-03-04T00:16:56Z",
+            "outcomes": [
+              {
+                "name": "Bryant Bulldogs",
+                "price": -115,
+                "point": -5.5
+              },
+              {
+                "name": "New Hampshire Wildcats",
+                "price": -115,
+                "point": 5.5
+              }
+            ]
+          },
+          {
+            "key": "totals",
+            "last_update": "2026-03-04T00:16:56Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": -115,
+                "point": 135.5
+              },
+              {
+                "name": "Under",
+                "price": -115,
+                "point": 135.5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "betmgm",
+        "title": "BetMGM",
+        "last_update": "2026-03-04T00:16:41Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2026-03-04T00:16:41Z",
+            "outcomes": [
+              {
+                "name": "Bryant Bulldogs",
+                "price": -300
+              },
+              {
+                "name": "New Hampshire Wildcats",
+                "price": 225
+              }
+            ]
+          },
+          {
+            "key": "spreads",
+            "last_update": "2026-03-04T00:16:41Z",
+            "outcomes": [
+              {
+                "name": "Bryant Bulldogs",
+                "price": -105,
+                "point": -5.5
+              },
+              {
+                "name": "New Hampshire Wildcats",
+                "price": -125,
+                "point": 5.5
+              }
+            ]
+          },
+          {
+            "key": "totals",
+            "last_update": "2026-03-04T00:16:41Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": -105,
+                "point": 136.5
+              },
+              {
+                "name": "Under",
+                "price": -125,
+                "point": 136.5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "bovada",
+        "title": "Bovada",
+        "last_update": "2026-03-04T00:16:44Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2026-03-04T00:16:44Z",
+            "outcomes": [
+              {
+                "name": "Bryant Bulldogs",
+                "price": 105
+              },
+              {
+                "name": "New Hampshire Wildcats",
+                "price": -125
+              }
+            ]
+          },
+          {
+            "key": "spreads",
+            "last_update": "2026-03-04T00:16:44Z",
+            "outcomes": [
+              {
+                "name": "Bryant Bulldogs",
+                "price": -110,
+                "point": 1.5
+              },
+              {
+                "name": "New Hampshire Wildcats",
+                "price": -110,
+                "point": -1.5
+              }
+            ]
+          },
+          {
+            "key": "totals",
+            "last_update": "2026-03-04T00:16:44Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": -110,
+                "point": 135.5
+              },
+              {
+                "name": "Under",
+                "price": -110,
+                "point": 135.5
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "319d9f88e441478b1e640ddbc20619d6",
+    "sport_key": "basketball_ncaab",
+    "sport_title": "NCAAB",
+    "commence_time": "2026-03-03T23:05:43Z",
+    "home_team": "NJIT Highlanders",
+    "away_team": "UMBC Retrievers",
+    "bookmakers": [
+      {
+        "key": "fanduel",
+        "title": "FanDuel",
+        "last_update": "2026-03-04T00:16:59Z",
+        "markets": [
+          {
+            "key": "spreads",
+            "last_update": "2026-03-04T00:16:58Z",
+            "outcomes": [
+              {
+                "name": "NJIT Highlanders",
+                "price": -114,
+                "point": 27.5
+              },
+              {
+                "name": "UMBC Retrievers",
+                "price": -114,
+                "point": -27.5
+              }
+            ]
+          },
+          {
+            "key": "totals",
+            "last_update": "2026-03-04T00:16:58Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": -118,
+                "point": 142.5
+              },
+              {
+                "name": "Under",
+                "price": -112,
+                "point": 142.5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "draftkings",
+        "title": "DraftKings",
+        "last_update": "2026-03-04T00:16:57Z",
+        "markets": [
+          {
+            "key": "spreads",
+            "last_update": "2026-03-04T00:16:56Z",
+            "outcomes": [
+              {
+                "name": "NJIT Highlanders",
+                "price": -110,
+                "point": 26.5
+              },
+              {
+                "name": "UMBC Retrievers",
+                "price": -120,
+                "point": -26.5
+              }
+            ]
+          },
+          {
+            "key": "totals",
+            "last_update": "2026-03-04T00:16:56Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": -115,
+                "point": 142.5
+              },
+              {
+                "name": "Under",
+                "price": -115,
+                "point": 142.5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "bovada",
+        "title": "Bovada",
+        "last_update": "2026-03-04T00:16:44Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2026-03-04T00:16:44Z",
+            "outcomes": [
+              {
+                "name": "NJIT Highlanders",
+                "price": 180
+              },
+              {
+                "name": "UMBC Retrievers",
+                "price": -220
+              }
+            ]
+          },
+          {
+            "key": "spreads",
+            "last_update": "2026-03-04T00:16:44Z",
+            "outcomes": [
+              {
+                "name": "NJIT Highlanders",
+                "price": -105,
+                "point": 4.5
+              },
+              {
+                "name": "UMBC Retrievers",
+                "price": -115,
+                "point": -4.5
+              }
+            ]
+          },
+          {
+            "key": "totals",
+            "last_update": "2026-03-04T00:16:44Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": -110,
+                "point": 141.5
+              },
+              {
+                "name": "Under",
+                "price": -110,
+                "point": 141.5
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

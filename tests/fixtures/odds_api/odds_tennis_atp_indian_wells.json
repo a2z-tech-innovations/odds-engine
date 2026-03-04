@@ -1,0 +1,497 @@
+[
+  {
+    "id": "20055a90b316513dfbf7f9af6c308371",
+    "sport_key": "tennis_atp_indian_wells",
+    "sport_title": "ATP Indian Wells",
+    "commence_time": "2026-03-04T00:00:00Z",
+    "home_team": "Alexis Galarneau",
+    "away_team": "Marcelo Tomas Barrios Vera",
+    "bookmakers": [
+      {
+        "key": "bovada",
+        "title": "Bovada",
+        "last_update": "2026-03-04T00:16:49Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2026-03-04T00:16:49Z",
+            "outcomes": [
+              {
+                "name": "Alexis Galarneau",
+                "price": -150
+              },
+              {
+                "name": "Marcelo Tomas Barrios Vera",
+                "price": 125
+              }
+            ]
+          },
+          {
+            "key": "spreads",
+            "last_update": "2026-03-04T00:16:49Z",
+            "outcomes": [
+              {
+                "name": "Alexis Galarneau",
+                "price": -105,
+                "point": -2.5
+              },
+              {
+                "name": "Marcelo Tomas Barrios Vera",
+                "price": -125,
+                "point": 2.5
+              }
+            ]
+          },
+          {
+            "key": "totals",
+            "last_update": "2026-03-04T00:16:49Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": -105,
+                "point": 23.5
+              },
+              {
+                "name": "Under",
+                "price": -125,
+                "point": 23.5
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "61156fc5f61c4567dc72aa3a5b8b566b",
+    "sport_key": "tennis_atp_indian_wells",
+    "sport_title": "ATP Indian Wells",
+    "commence_time": "2026-03-04T00:00:00Z",
+    "home_team": "Tristan Schoolkate",
+    "away_team": "Elias Ymer",
+    "bookmakers": [
+      {
+        "key": "bovada",
+        "title": "Bovada",
+        "last_update": "2026-03-04T00:08:32Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2026-03-04T00:08:32Z",
+            "outcomes": [
+              {
+                "name": "Elias Ymer",
+                "price": 400
+              },
+              {
+                "name": "Tristan Schoolkate",
+                "price": -550
+              }
+            ]
+          },
+          {
+            "key": "spreads",
+            "last_update": "2026-03-04T00:08:32Z",
+            "outcomes": [
+              {
+                "name": "Elias Ymer",
+                "price": 135,
+                "point": 3.5
+              },
+              {
+                "name": "Tristan Schoolkate",
+                "price": -175,
+                "point": -3.5
+              }
+            ]
+          },
+          {
+            "key": "totals",
+            "last_update": "2026-03-04T00:08:32Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": -130,
+                "point": 21.5
+              },
+              {
+                "name": "Under",
+                "price": 100,
+                "point": 21.5
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "3d54865490839304789ba3e4780f0b9c",
+    "sport_key": "tennis_atp_indian_wells",
+    "sport_title": "ATP Indian Wells",
+    "commence_time": "2026-03-04T01:00:00Z",
+    "home_team": "Roman Andres Burruchaga",
+    "away_team": "Chun-Hsin Tseng",
+    "bookmakers": [
+      {
+        "key": "bovada",
+        "title": "Bovada",
+        "last_update": "2026-03-04T00:11:26Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2026-03-04T00:11:26Z",
+            "outcomes": [
+              {
+                "name": "Chun-Hsin Tseng",
+                "price": 105
+              },
+              {
+                "name": "Roman Andres Burruchaga",
+                "price": -125
+              }
+            ]
+          },
+          {
+            "key": "spreads",
+            "last_update": "2026-03-04T00:11:26Z",
+            "outcomes": [
+              {
+                "name": "Chun-Hsin Tseng",
+                "price": -130,
+                "point": 1.5
+              },
+              {
+                "name": "Roman Andres Burruchaga",
+                "price": 100,
+                "point": -1.5
+              }
+            ]
+          },
+          {
+            "key": "totals",
+            "last_update": "2026-03-04T00:11:26Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": 105,
+                "point": 22.5
+              },
+              {
+                "name": "Under",
+                "price": -135,
+                "point": 22.5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "betonlineag",
+        "title": "BetOnline.ag",
+        "last_update": "2026-03-04T00:14:57Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2026-03-04T00:14:57Z",
+            "outcomes": [
+              {
+                "name": "Chun-Hsin Tseng",
+                "price": -103
+              },
+              {
+                "name": "Roman Andres Burruchaga",
+                "price": -117
+              }
+            ]
+          },
+          {
+            "key": "spreads",
+            "last_update": "2026-03-04T00:14:57Z",
+            "outcomes": [
+              {
+                "name": "Chun-Hsin Tseng",
+                "price": -112,
+                "point": 1.5
+              },
+              {
+                "name": "Roman Andres Burruchaga",
+                "price": -108,
+                "point": -1.5
+              }
+            ]
+          },
+          {
+            "key": "totals",
+            "last_update": "2026-03-04T00:14:57Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": -124,
+                "point": 21.5
+              },
+              {
+                "name": "Under",
+                "price": 104,
+                "point": 21.5
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c1799166157aeadd55441505041ba1bc",
+    "sport_key": "tennis_atp_indian_wells",
+    "sport_title": "ATP Indian Wells",
+    "commence_time": "2026-03-04T01:00:00Z",
+    "home_team": "Ignacio Buse",
+    "away_team": "Rinky Hijikata",
+    "bookmakers": [
+      {
+        "key": "bovada",
+        "title": "Bovada",
+        "last_update": "2026-03-04T00:16:49Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2026-03-04T00:16:49Z",
+            "outcomes": [
+              {
+                "name": "Ignacio Buse",
+                "price": -140
+              },
+              {
+                "name": "Rinky Hijikata",
+                "price": 115
+              }
+            ]
+          },
+          {
+            "key": "spreads",
+            "last_update": "2026-03-04T00:16:49Z",
+            "outcomes": [
+              {
+                "name": "Ignacio Buse",
+                "price": -120,
+                "point": -1.5
+              },
+              {
+                "name": "Rinky Hijikata",
+                "price": -110,
+                "point": 1.5
+              }
+            ]
+          },
+          {
+            "key": "totals",
+            "last_update": "2026-03-04T00:16:49Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": -120,
+                "point": 22.0
+              },
+              {
+                "name": "Under",
+                "price": -110,
+                "point": 22.0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "betonlineag",
+        "title": "BetOnline.ag",
+        "last_update": "2026-03-04T00:16:35Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2026-03-04T00:16:35Z",
+            "outcomes": [
+              {
+                "name": "Ignacio Buse",
+                "price": -140
+              },
+              {
+                "name": "Rinky Hijikata",
+                "price": 120
+              }
+            ]
+          },
+          {
+            "key": "spreads",
+            "last_update": "2026-03-04T00:16:35Z",
+            "outcomes": [
+              {
+                "name": "Ignacio Buse",
+                "price": -110,
+                "point": -1.5
+              },
+              {
+                "name": "Rinky Hijikata",
+                "price": -110,
+                "point": 1.5
+              }
+            ]
+          },
+          {
+            "key": "totals",
+            "last_update": "2026-03-04T00:16:35Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": 104,
+                "point": 22.5
+              },
+              {
+                "name": "Under",
+                "price": -124,
+                "point": 22.5
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "3e2b8271245233b593c4d21047a7be07",
+    "sport_key": "tennis_atp_indian_wells",
+    "sport_title": "ATP Indian Wells",
+    "commence_time": "2026-03-04T18:00:00Z",
+    "home_team": "Quentin Halys",
+    "away_team": "Adam Walton",
+    "bookmakers": [
+      {
+        "key": "bovada",
+        "title": "Bovada",
+        "last_update": "2026-03-04T00:16:49Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2026-03-04T00:16:49Z",
+            "outcomes": [
+              {
+                "name": "Adam Walton",
+                "price": 155
+              },
+              {
+                "name": "Quentin Halys",
+                "price": -185
+              }
+            ]
+          },
+          {
+            "key": "spreads",
+            "last_update": "2026-03-04T00:16:49Z",
+            "outcomes": [
+              {
+                "name": "Adam Walton",
+                "price": -115,
+                "point": 2.5
+              },
+              {
+                "name": "Quentin Halys",
+                "price": -115,
+                "point": -2.5
+              }
+            ]
+          },
+          {
+            "key": "totals",
+            "last_update": "2026-03-04T00:16:49Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": -115,
+                "point": 23.0
+              },
+              {
+                "name": "Under",
+                "price": -115,
+                "point": 23.0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "draftkings",
+        "title": "DraftKings",
+        "last_update": "2026-03-04T00:16:52Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2026-03-04T00:16:52Z",
+            "outcomes": [
+              {
+                "name": "Adam Walton",
+                "price": 155
+              },
+              {
+                "name": "Quentin Halys",
+                "price": -190
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "betonlineag",
+        "title": "BetOnline.ag",
+        "last_update": "2026-03-04T00:16:35Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2026-03-04T00:16:35Z",
+            "outcomes": [
+              {
+                "name": "Adam Walton",
+                "price": 157
+              },
+              {
+                "name": "Quentin Halys",
+                "price": -180
+              }
+            ]
+          },
+          {
+            "key": "spreads",
+            "last_update": "2026-03-04T00:16:35Z",
+            "outcomes": [
+              {
+                "name": "Adam Walton",
+                "price": -105,
+                "point": 2.5
+              },
+              {
+                "name": "Quentin Halys",
+                "price": -115,
+                "point": -2.5
+              }
+            ]
+          },
+          {
+            "key": "totals",
+            "last_update": "2026-03-04T00:16:35Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": 105,
+                "point": 23.5
+              },
+              {
+                "name": "Under",
+                "price": -125,
+                "point": 23.5
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "d85249f9dcdda6473981e1c64fa773e5",
+    "sport_key": "tennis_wta_indian_wells",
+    "sport_title": "WTA Indian Wells",
+    "commence_time": "2026-03-03T22:00:00Z",
+    "home_team": "Himeno Sakatsume",
+    "away_team": "Nikola Bartunkova"
+  },
+  {
+    "id": "7cfbb7b2e405f3ba5254a4b71938fc1f",
+    "sport_key": "tennis_wta_indian_wells",
+    "sport_title": "WTA Indian Wells",
+    "commence_time": "2026-03-04T15:00:00Z",
+    "home_team": "Sloane Stephens",
+    "away_team": "Maria Camila Osorio Serrano"
+  },
+  {
+    "id": "bf8bec69ac5ee67d72a2f5623ce13e00",
+    "sport_key": "tennis_wta_indian_wells",
+    "sport_title": "WTA Indian Wells",
+    "commence_time": "2026-03-04T18:00:00Z",
+    "home_team": "Ajla Tomljanovic",
+    "away_team": "Elena Gabriela Ruse"
+  },
+  {
+    "id": "11eae35da34ad307ec4547854601ca8a",
+    "sport_key": "tennis_wta_indian_wells",
+    "sport_title": "WTA Indian Wells",
+    "commence_time": "2026-03-04T18:00:00Z",
+    "home_team": "Elsa Jacquemot",
+    "away_team": "Anna Bond\u00e1r"
+  },
+  {
+    "id": "8696298f60521987b23656fbfe945589",
+    "sport_key": "tennis_wta_indian_wells",
+    "sport_title": "WTA Indian Wells",
+    "commence_time": "2026-03-04T18:00:00Z",
+    "home_team": "Antonia Ruzic",
+    "away_team": "Jennifer Brady"
+  }
+]

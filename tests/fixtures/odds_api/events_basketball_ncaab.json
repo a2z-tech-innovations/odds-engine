@@ -1,0 +1,42 @@
+[
+  {
+    "id": "22a27cfcc1c5cf3fe119a3938d9ad8cc",
+    "sport_key": "basketball_ncaab",
+    "sport_title": "NCAAB",
+    "commence_time": "2026-03-03T23:00:00Z",
+    "home_team": "Louisiana Ragin' Cajuns",
+    "away_team": "Georgia St Panthers"
+  },
+  {
+    "id": "ac6197e1688d3b1bfb26d5a45368c8ef",
+    "sport_key": "basketball_ncaab",
+    "sport_title": "NCAAB",
+    "commence_time": "2026-03-03T23:03:00Z",
+    "home_team": "South Carolina Gamecocks",
+    "away_team": "Tennessee Volunteers"
+  },
+  {
+    "id": "451b82f69548237ff6144758d1753d97",
+    "sport_key": "basketball_ncaab",
+    "sport_title": "NCAAB",
+    "commence_time": "2026-03-03T23:04:30Z",
+    "home_team": "Maine Black Bears",
+    "away_team": "UMass Lowell River Hawks"
+  },
+  {
+    "id": "838dacb26dd13cbe51d6272eec77b9d7",
+    "sport_key": "basketball_ncaab",
+    "sport_title": "NCAAB",
+    "commence_time": "2026-03-03T23:05:12Z",
+    "home_team": "New Hampshire Wildcats",
+    "away_team": "Bryant Bulldogs"
+  },
+  {
+    "id": "319d9f88e441478b1e640ddbc20619d6",
+    "sport_key": "basketball_ncaab",
+    "sport_title": "NCAAB",
+    "commence_time": "2026-03-03T23:05:43Z",
+    "home_team": "NJIT Highlanders",
+    "away_team": "UMBC Retrievers"
+  }
+]
