@@ -12,6 +12,12 @@ from odds_engine.repositories.cache_repo import CacheRepository
 router = APIRouter()
 
 
+@router.get("/budget")
+async def get_budget(cache: CacheRepository = Depends(get_cache_repo)) -> dict:
+    """Return current credit budget usage."""
+    return await cache.get_budget()
+
+
 @router.get("/health")
 async def health_check(
     request: Request,

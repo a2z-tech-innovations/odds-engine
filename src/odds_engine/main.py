@@ -2,6 +2,7 @@ from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
 import httpx
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from redis.asyncio import Redis
@@ -13,6 +14,14 @@ from odds_engine.logging import configure_logging, get_logger
 from odds_engine.models.database import create_engine, create_session_factory
 
 logger = get_logger(__name__)
+
+
+def _sport_group(sport_key: str) -> str:
+    if sport_key.startswith(("tennis_atp_", "tennis_wta_")):
+        return "Tennis"
+    if sport_key.startswith("basketball_"):
+        return "Basketball"
+    return sport_key.split("_")[0].title()
 
 
 @asynccontextmanager
@@ -44,9 +53,68 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     )
     log.info("odds_client.created")
 
+    # Scheduler
+    if settings.scheduler_enabled:
+        from odds_engine.repositories.cache_repo import CacheRepository
+        from odds_engine.repositories.event_repo import EventRepository
+        from odds_engine.repositories.odds_repo import OddsRepository
+        from odds_engine.services.odds_service import OddsService
+        from odds_engine.services.publisher import OddsPublisher
+        from odds_engine.services.scheduler import BudgetManager, FetchScheduler, SportDiscovery
+
+        _cache_repo = CacheRepository(redis)
+        _budget_manager = BudgetManager(settings, _cache_repo)
+        _sport_discovery = SportDiscovery(app.state.odds_client, _cache_repo)
+        _fetch_scheduler = FetchScheduler(settings, _budget_manager, _sport_discovery)
+
+        async def _fetch_job() -> None:
+            sport_keys = await _fetch_scheduler.get_sports_to_fetch()
+            if not sport_keys:
+                log.info("scheduler.nothing_to_fetch")
+                return
+            async with app.state.session_factory() as session:
+                publisher = OddsPublisher(_cache_repo)
+                svc = OddsService(
+                    client=app.state.odds_client,
+                    event_repo=EventRepository(session),
+                    odds_repo=OddsRepository(session),
+                    cache=_cache_repo,
+                    publisher=publisher,
+                )
+                for sport_key in sport_keys:
+                    try:
+                        result = await svc.fetch_and_store(
+                            sport_key=sport_key,
+                            sport_group=_sport_group(sport_key),
+                        )
+                        log.info(
+                            "scheduler.fetch_complete",
+                            sport_key=sport_key,
+                            events=result.events_fetched,
+                            credits_used=result.credits_used,
+                        )
+                    except Exception as exc:
+                        log.error("scheduler.fetch_error", sport_key=sport_key, error=str(exc))
+
+        scheduler = AsyncIOScheduler(timezone="UTC")
+        scheduler.add_job(
+            _fetch_job,
+            "interval",
+            minutes=settings.pre_match_interval_minutes,
+            id="pre_match_fetch",
+            max_instances=1,
+        )
+        scheduler.add_job(_fetch_job, "date", id="startup_fetch")
+        scheduler.start()
+        app.state.scheduler = scheduler
+        log.info("scheduler.started", interval_minutes=settings.pre_match_interval_minutes)
+
     yield
 
     # Shutdown
+    if hasattr(app.state, "scheduler"):
+        app.state.scheduler.shutdown(wait=False)
+        log.info("scheduler.stopped")
     await http_client.aclose()
     await redis.aclose()
     await engine.dispose()
