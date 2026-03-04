@@ -5,6 +5,7 @@ import asyncio
 from fastapi import APIRouter, Query, WebSocket, WebSocketDisconnect
 
 from odds_engine.logging import get_logger
+from odds_engine.repositories.cache_repo import CacheRepository
 
 router = APIRouter()
 
@@ -39,14 +40,22 @@ async def websocket_odds(
     await websocket.accept()
 
     redis = websocket.app.state.redis
-
+    cache = CacheRepository(redis)
     channel = f"odds:updates:{sport_group}" if sport_group else "odds:updates:all"
-
-    pubsub = redis.pubsub()
-    await pubsub.subscribe(channel)
 
     log = get_logger(__name__)
     log.info("ws.connected", channel=channel)
+
+    # Send current cached snapshot immediately so consumer doesn't wait up to 60 min
+    if sport_group:
+        cached_events = await cache.get_active_events(sport_group)
+        if cached_events:
+            for event in cached_events:
+                await websocket.send_text(event.model_dump_json())
+            log.debug("ws.initial_snapshot_sent", sport_group=sport_group, count=len(cached_events))
+
+    pubsub = redis.pubsub()
+    await pubsub.subscribe(channel)
 
     try:
         while True:
