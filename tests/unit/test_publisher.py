@@ -57,7 +57,7 @@ async def test_publish_calls_set_event_and_publish(
 
     await publisher.publish(event)
 
-    mock_cache.set_event.assert_awaited_once_with(event)
+    mock_cache.set_event.assert_awaited_once_with(event, ttl=3900)
     mock_cache.publish_odds_update.assert_awaited_once_with(event)
 
 

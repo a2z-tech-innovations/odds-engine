@@ -13,10 +13,15 @@ if TYPE_CHECKING:
 
 logger = get_logger(__name__)
 
+# Cache TTL must exceed the scheduler interval so data persists between runs.
+# Default scheduler interval is 60 min; use 65 min (3900 s) as a safe buffer.
+_EVENT_CACHE_TTL = 3900
+
 
 class OddsPublisher:
-    def __init__(self, cache: CacheRepository) -> None:
+    def __init__(self, cache: CacheRepository, cache_ttl: int = _EVENT_CACHE_TTL) -> None:
         self._cache = cache
+        self._cache_ttl = cache_ttl
 
     async def publish(self, event: EnrichedEventResponse) -> None:
         """Push a single enriched event to the cache and pub/sub channels.
@@ -25,7 +30,7 @@ class OddsPublisher:
         1. cache.set_event(event)           — update single-event cache
         2. cache.publish_odds_update(event) — push to Redis pub/sub channels
         """
-        await self._cache.set_event(event)
+        await self._cache.set_event(event, ttl=self._cache_ttl)
         await self._cache.publish_odds_update(event)
         logger.debug(
             "published odds update",
@@ -49,6 +54,6 @@ class OddsPublisher:
             by_sport_group[event.sport_group].append(event)
 
         for sport_group, group_events in by_sport_group.items():
-            await self._cache.set_active_events(sport_group, group_events)
+            await self._cache.set_active_events(sport_group, group_events, ttl=self._cache_ttl)
 
         logger.debug("published batch of odds updates", count=len(events))

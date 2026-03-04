@@ -8,13 +8,13 @@ from odds_engine.schemas.enriched import EnrichedEventResponse
 from odds_engine.schemas.odds_api import OddsAPISport
 
 
-def _seconds_until_midnight_utc() -> int:
+def seconds_until_midnight_utc() -> int:
     now = datetime.now(UTC)
     tomorrow = (now + timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
     return int((tomorrow - now).total_seconds())
 
 
-def _seconds_until_next_month() -> int:
+def seconds_until_next_month() -> int:
     now = datetime.now(UTC)
     if now.month == 12:
         next_month = now.replace(
@@ -40,12 +40,12 @@ class CacheRepository:
             return None
         return EnrichedEventResponse.model_validate_json(data)
 
-    async def set_event(self, event: EnrichedEventResponse) -> None:
-        """SET event:{external_id} <json> EX 300."""
+    async def set_event(self, event: EnrichedEventResponse, ttl: int = 300) -> None:
+        """SET event:{external_id} <json> EX ttl."""
         await self.redis.set(
             f"event:{event.event_id}",
             event.model_dump_json(),
-            ex=300,
+            ex=ttl,
         )
 
     async def get_active_events(self, sport_group: str) -> list[EnrichedEventResponse] | None:
@@ -59,13 +59,13 @@ class CacheRepository:
         return [EnrichedEventResponse.model_validate(item) for item in raw_list]
 
     async def set_active_events(
-        self, sport_group: str, events: list[EnrichedEventResponse]
+        self, sport_group: str, events: list[EnrichedEventResponse], ttl: int = 300
     ) -> None:
-        """SET events:{sport_group}:active <json array> EX 300."""
+        """SET events:{sport_group}:active <json array> EX ttl."""
         import json
 
         payload = json.dumps([json.loads(e.model_dump_json()) for e in events])
-        await self.redis.set(f"events:{sport_group}:active", payload, ex=300)
+        await self.redis.set(f"events:{sport_group}:active", payload, ex=ttl)
 
     # --- Sports cache ---
 
@@ -93,7 +93,7 @@ class CacheRepository:
         new_total = await self.redis.incrby("budget:daily", credits)
         ttl = await self.redis.ttl("budget:daily")
         if ttl == -1:
-            await self.redis.expire("budget:daily", _seconds_until_midnight_utc())
+            await self.redis.expire("budget:daily", seconds_until_midnight_utc())
         return int(new_total)
 
     async def increment_monthly_budget(self, credits: int) -> int:
@@ -101,7 +101,7 @@ class CacheRepository:
         new_total = await self.redis.incrby("budget:monthly", credits)
         ttl = await self.redis.ttl("budget:monthly")
         if ttl == -1:
-            await self.redis.expire("budget:monthly", _seconds_until_next_month())
+            await self.redis.expire("budget:monthly", seconds_until_next_month())
         return int(new_total)
 
     async def get_budget(self) -> dict:

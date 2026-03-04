@@ -63,6 +63,25 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
         from odds_engine.services.scheduler import BudgetManager, FetchScheduler, SportDiscovery
 
         _cache_repo = CacheRepository(redis)
+
+        # Seed Redis budget counters from DB on startup so restarts don't reset them.
+        # Redis counters are ephemeral; DB is the authoritative source of truth.
+        async with app.state.session_factory() as _seed_session:
+            _odds_repo_seed = OddsRepository(_seed_session)
+            _db_daily = await _odds_repo_seed.get_daily_credits_used()
+            _db_monthly = await _odds_repo_seed.get_monthly_credits_used()
+        _redis_budget = await _cache_repo.get_budget()
+        if _db_daily > _redis_budget["daily_used"]:
+            from odds_engine.repositories.cache_repo import (
+                seconds_until_midnight_utc,
+                seconds_until_next_month,
+            )
+            await redis.set("budget:daily", _db_daily, ex=seconds_until_midnight_utc())
+            log.info("budget.seeded_daily", daily_used=_db_daily)
+        if _db_monthly > _redis_budget["monthly_used"]:
+            await redis.set("budget:monthly", _db_monthly, ex=seconds_until_next_month())
+            log.info("budget.seeded_monthly", monthly_used=_db_monthly)
+
         _budget_manager = BudgetManager(settings, _cache_repo)
         _sport_discovery = SportDiscovery(app.state.odds_client, _cache_repo)
         _fetch_scheduler = FetchScheduler(settings, _budget_manager, _sport_discovery)
