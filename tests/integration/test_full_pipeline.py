@@ -351,7 +351,7 @@ async def test_event_service_cache_first(db_session, redis_client):
     response = await event_service.get_event(enriched.event_id)
 
     assert response is not None
-    assert response.external_id == enriched.event_id
+    assert response.event_id == enriched.event_id
     assert response.home_team == enriched.home_team
     assert response.away_team == enriched.away_team
 

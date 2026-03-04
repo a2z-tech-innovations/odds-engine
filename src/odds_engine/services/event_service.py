@@ -30,7 +30,7 @@ def _db_event_to_enriched(event) -> EnrichedEventResponse:
         home_team=event.home_team,
         away_team=event.away_team,
         commence_time=event.commence_time,
-        status=str(event.status.value),
+        status=event.status.value if hasattr(event.status, "value") else str(event.status),
         snapshot_id=uuid.uuid4(),
         fetched_at=event.updated_at,
         bookmakers={},
