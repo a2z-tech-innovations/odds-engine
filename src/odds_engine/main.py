@@ -149,11 +149,21 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
             log.info("cache.warmed", events=len(enriched_events))
 
+        async def _refresh_sports_cache() -> None:
+            """Fetch active sports from Odds API and populate sports:active in Redis."""
+            try:
+                sports = await app.state.odds_client.get_sports(active_only=True)
+                await _cache_repo.set_active_sports(sports)
+                log.info("startup.sports_cached", count=len(sports))
+            except Exception as exc:
+                log.error("startup.sports_cache_failed", error=str(exc))
+
         async def _startup_job() -> None:
-            """On startup: always warm cache from DB, then fetch fresh odds if > 4 hours stale."""
+            """On startup: warm cache from DB, refresh sports list, then fetch if stale."""
             from datetime import timedelta
 
             await _warm_cache()
+            await _refresh_sports_cache()
 
             async with app.state.session_factory() as session:
                 last_fetch = await OddsRepository(session).get_last_fetch_time()
@@ -224,6 +234,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.exception_handler(OddsAPIError)
     async def odds_api_error_handler(request: Request, exc: OddsAPIError) -> JSONResponse:
+        logger.error(
+            "odds_api_error",
+            path=request.url.path,
+            status_code=exc.status_code,
+            detail=str(exc),
+        )
         return JSONResponse(status_code=502, content={"detail": str(exc)})
 
     # Middleware
