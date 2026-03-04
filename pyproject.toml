@@ -52,6 +52,9 @@ select = [
     "TCH",  # type-checking imports
     "RUF",  # ruff-specific rules
 ]
+ignore = [
+    "B008",  # FastAPI Depends()/Query() in function defaults — intentional pattern
+]
 
 [tool.ruff.lint.isort]
 known-first-party = ["odds_engine"]

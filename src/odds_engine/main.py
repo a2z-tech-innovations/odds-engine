@@ -1,10 +1,12 @@
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
+import httpx
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from redis.asyncio import Redis
 
+from odds_engine.clients.odds_api import OddsAPIClient
 from odds_engine.config import Settings, get_settings
 from odds_engine.exceptions import BudgetExhaustedError, EventNotFoundError, OddsAPIError
 from odds_engine.logging import configure_logging, get_logger
@@ -32,9 +34,20 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     app.state.redis = redis
     log.info("redis.connected")
 
+    # HTTP client + Odds API client
+    http_client = httpx.AsyncClient(timeout=30.0)
+    app.state.http_client = http_client
+    app.state.odds_client = OddsAPIClient(
+        api_key=settings.odds_api_key,
+        base_url=settings.odds_api_base_url,
+        http_client=http_client,
+    )
+    log.info("odds_client.created")
+
     yield
 
     # Shutdown
+    await http_client.aclose()
     await redis.aclose()
     await engine.dispose()
     log.info("shutdown.complete")
@@ -68,9 +81,16 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     async def odds_api_error_handler(request: Request, exc: OddsAPIError) -> JSONResponse:
         return JSONResponse(status_code=502, content={"detail": str(exc)})
 
-    # Routers (registered once implemented)
-    # from odds_engine.api.router import router
-    # app.include_router(router)
+    # Middleware
+    from odds_engine.api.middleware import AuthMiddleware, RequestIDMiddleware
+
+    app.add_middleware(AuthMiddleware)
+    app.add_middleware(RequestIDMiddleware)
+
+    # Routers
+    from odds_engine.api.router import router
+
+    app.include_router(router)
 
     return app
 
