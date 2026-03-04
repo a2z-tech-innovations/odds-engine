@@ -23,7 +23,12 @@ from odds_engine.services.publisher import OddsPublisher
 
 async def get_db(request: Request) -> AsyncGenerator[AsyncSession, None]:
     async with request.app.state.session_factory() as session:
-        yield session
+        try:
+            yield session
+            await session.commit()
+        except Exception:
+            await session.rollback()
+            raise
 
 
 async def get_redis(request: Request) -> Redis:

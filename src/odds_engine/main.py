@@ -72,21 +72,22 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
             if not sport_keys:
                 log.info("scheduler.nothing_to_fetch")
                 return
-            async with app.state.session_factory() as session:
-                publisher = OddsPublisher(_cache_repo)
-                svc = OddsService(
-                    client=app.state.odds_client,
-                    event_repo=EventRepository(session),
-                    odds_repo=OddsRepository(session),
-                    cache=_cache_repo,
-                    publisher=publisher,
-                )
-                for sport_key in sport_keys:
+            publisher = OddsPublisher(_cache_repo)
+            for sport_key in sport_keys:
+                async with app.state.session_factory() as session:
                     try:
+                        svc = OddsService(
+                            client=app.state.odds_client,
+                            event_repo=EventRepository(session),
+                            odds_repo=OddsRepository(session),
+                            cache=_cache_repo,
+                            publisher=publisher,
+                        )
                         result = await svc.fetch_and_store(
                             sport_key=sport_key,
                             sport_group=_sport_group(sport_key),
                         )
+                        await session.commit()
                         log.info(
                             "scheduler.fetch_complete",
                             sport_key=sport_key,
@@ -94,6 +95,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
                             credits_used=result.credits_used,
                         )
                     except Exception as exc:
+                        await session.rollback()
                         log.error("scheduler.fetch_error", sport_key=sport_key, error=str(exc))
 
         scheduler = AsyncIOScheduler(timezone="UTC")

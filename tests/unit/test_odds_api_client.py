@@ -159,7 +159,7 @@ async def test_get_odds_returns_events_and_usage() -> None:
 @pytest.mark.asyncio
 async def test_get_odds_uses_default_markets_and_region() -> None:
     """When no markets/regions args provided, defaults must be used."""
-    headers_data = {"x-requests-used": "3", "x-requests-remaining": "497"}
+    headers_data = {"x-requests-last": "3", "x-requests-remaining": "497"}
     client = build_client(make_response("odds_basketball_ncaab.json", headers=headers_data))
 
     await client.get_odds("basketball_ncaab")
@@ -241,7 +241,7 @@ async def test_get_odds_raises_on_timeout() -> None:
 @pytest.mark.asyncio
 async def test_get_odds_empty_response_returns_empty_list() -> None:
     """When the Odds API returns [], get_odds() must return ([], usage) without error."""
-    usage_headers = {"x-requests-used": "3", "x-requests-remaining": "494"}
+    usage_headers = {"x-requests-last": "3", "x-requests-remaining": "494"}
     client = build_client(make_empty_response(headers=usage_headers))
 
     events, usage = await client.get_odds("basketball_ncaab")

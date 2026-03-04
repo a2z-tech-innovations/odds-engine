@@ -55,7 +55,7 @@ class OddsAPIClient:
     @staticmethod
     def _parse_usage(response: httpx.Response) -> OddsAPIUsage:
         return OddsAPIUsage(
-            credits_used=int(response.headers.get("x-requests-used", 0)),
+            credits_used=int(response.headers.get("x-requests-last", 0)),
             credits_remaining=int(response.headers.get("x-requests-remaining", 0)),
         )
 
