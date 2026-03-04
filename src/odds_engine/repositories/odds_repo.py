@@ -63,6 +63,22 @@ class OddsRepository:
         await self._session.flush([enriched])
         return enriched
 
+    async def get_bookmaker_odds_for_snapshot(self, snapshot_id: uuid.UUID) -> list[dict]:
+        """Return flat bookmaker odds rows for a given snapshot as plain dicts."""
+        stmt = select(BookmakerOdds).where(BookmakerOdds.snapshot_id == snapshot_id)
+        result = await self._session.execute(stmt)
+        rows = result.scalars().all()
+        return [
+            {
+                "bookmaker_key": r.bookmaker_key,
+                "market_key": r.market_key,
+                "outcome_name": r.outcome_name,
+                "outcome_price": r.outcome_price,
+                "outcome_point": r.outcome_point,
+            }
+            for r in rows
+        ]
+
     async def get_latest_enriched(self, event_id: uuid.UUID) -> EnrichedSnapshot | None:
         """Return the most recent EnrichedSnapshot for an event, ordered by computed_at DESC."""
         stmt = (

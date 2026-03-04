@@ -122,16 +122,10 @@ class OddsService:
             previous_enriched = await self._odds_repo.get_latest_enriched(db_event.id)
             previous_bookmaker_odds: list[dict] | None = None
             if previous_enriched is not None:
-                # Extract raw bookmaker rows from previous snapshot's bookmaker_odds
-                # stored in the enriched snapshot's bookmakers JSONB field — not available
-                # directly; use bookmaker_rows from a separate query would be ideal but
-                # the repo doesn't expose that. Use the enriched bookmakers dict instead.
-                # The movement computation expects rows with keys:
-                # bookmaker_key, market_key, outcome_name, outcome_price, outcome_point.
-                # We derive these from the EnrichedSnapshot.bookmakers JSONB which
-                # is stored as {bookmaker_key: {market_key: {outcomes: [...]}}} plain dicts.
-                previous_bookmaker_odds = _extract_bookmaker_rows_from_enriched(
-                    previous_enriched
+                previous_bookmaker_odds = (
+                    await self._odds_repo.get_bookmaker_odds_for_snapshot(
+                        previous_enriched.snapshot_id
+                    )
                 )
 
             # f. Build enriched event
@@ -225,24 +219,3 @@ class OddsService:
 
         return results
 
-
-# ---------------------------------------------------------------------------
-# Internal helpers
-# ---------------------------------------------------------------------------
-
-
-def _extract_bookmaker_rows_from_enriched(previous_enriched) -> list[dict]:
-    """Extract flat bookmaker-odds rows from an EnrichedSnapshot ORM instance.
-
-    The EnrichedSnapshot stores bookmaker data indirectly via bookmaker_odds
-    rows in the DB. For movement computation we need rows with:
-    bookmaker_key, market_key, outcome_name, outcome_price, outcome_point.
-
-    Since the ORM model doesn't carry a direct bookmakers attribute we fall
-    back to an empty list, letting the enrichment layer produce no movement
-    for the first snapshot of each event.
-    """
-    # The EnrichedSnapshot ORM model does not expose a bookmakers JSONB column.
-    # Movement data requires querying BookmakerOdds directly (not in scope of
-    # this service). Return empty to produce zero-movement on first snapshot.
-    return []

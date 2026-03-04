@@ -30,7 +30,7 @@ class EventService:
         """
         if filters.sport_group is not None:
             cached = await self._cache.get_active_events(filters.sport_group)
-            if cached is not None:
+            if cached:
                 logger.debug(
                     "events cache hit",
                     sport_group=filters.sport_group,
