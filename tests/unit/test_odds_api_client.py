@@ -151,13 +151,14 @@ async def test_get_odds_returns_events_and_usage() -> None:
     assert "/sports/basketball_ncaab/odds" in call_kwargs.args[0]
     params = call_kwargs.kwargs["params"]
     assert params["oddsFormat"] == "american"
+    assert params["regions"] == "us"
     assert "h2h" in params["markets"]
-    assert "regions" not in params
+    assert "bookmakers" not in params
 
 
 @pytest.mark.asyncio
-async def test_get_odds_uses_default_markets_and_bookmakers() -> None:
-    """When no markets/bookmakers args provided, defaults must be used."""
+async def test_get_odds_uses_default_markets_and_region() -> None:
+    """When no markets/regions args provided, defaults must be used."""
     headers_data = {"x-requests-used": "3", "x-requests-remaining": "497"}
     client = build_client(make_response("odds_basketball_ncaab.json", headers=headers_data))
 
@@ -165,9 +166,8 @@ async def test_get_odds_uses_default_markets_and_bookmakers() -> None:
 
     params = client._http_client.get.call_args.kwargs["params"]
     assert params["markets"] == "h2h,spreads,totals"
-    assert "draftkings" in params["bookmakers"]
-    assert "fanduel" in params["bookmakers"]
-    assert "betonlineag" in params["bookmakers"]
+    assert params["regions"] == "us"
+    assert "bookmakers" not in params
 
 
 @pytest.mark.asyncio

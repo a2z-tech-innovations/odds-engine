@@ -76,17 +76,15 @@ class OddsAPIClient:
         self,
         sport_key: str,
         markets: list[str] | None = None,
-        bookmakers: list[str] | None = None,
+        regions: str = "us",
     ) -> tuple[list[OddsAPIEvent], OddsAPIUsage]:
         """GET /sports/{sport_key}/odds — costs credits; returns (events, usage)."""
         if markets is None:
             markets = ["h2h", "spreads", "totals"]
-        if bookmakers is None:
-            bookmakers = ["draftkings", "fanduel", "betmgm", "caesars", "bovada", "betonlineag"]
 
         params = {
+            "regions": regions,
             "markets": ",".join(markets),
-            "bookmakers": ",".join(bookmakers),
             "oddsFormat": "american",
         }
         response = await self._get(f"/sports/{sport_key}/odds", params)
