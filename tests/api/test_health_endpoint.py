@@ -21,6 +21,7 @@ def mock_odds_repo(app):
     repo = AsyncMock()
     repo.get_daily_credits_used = AsyncMock(return_value=0)
     repo.get_actual_monthly_credits_used = AsyncMock(return_value=0)
+    repo.get_last_fetch_time = AsyncMock(return_value=None)
     app.dependency_overrides[get_odds_repo] = lambda: repo
     yield repo
     app.dependency_overrides.pop(get_odds_repo, None)

@@ -78,8 +78,16 @@ def mock_cache() -> AsyncMock:
 
 
 @pytest.fixture()
-def service(mock_repo: AsyncMock, mock_cache: AsyncMock) -> EventService:
-    return EventService(repo=mock_repo, cache=mock_cache)
+def mock_odds_repo() -> AsyncMock:
+    repo = AsyncMock()
+    repo.get_latest_enriched_bulk = AsyncMock(return_value={})
+    repo.get_latest_enriched = AsyncMock(return_value=None)
+    return repo
+
+
+@pytest.fixture()
+def service(mock_repo: AsyncMock, mock_cache: AsyncMock, mock_odds_repo: AsyncMock) -> EventService:
+    return EventService(repo=mock_repo, cache=mock_cache, odds_repo=mock_odds_repo)
 
 
 # ---------------------------------------------------------------------------

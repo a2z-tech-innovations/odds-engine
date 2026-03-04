@@ -337,7 +337,8 @@ async def test_event_service_cache_first(db_session, redis_client):
     """EventService.get_event() returns a cached enriched event without a DB hit."""
     event_repo = EventRepository(db_session)
     cache_repo = CacheRepository(redis_client)
-    event_service = EventService(repo=event_repo, cache=cache_repo)
+    odds_repo = OddsRepository(db_session)
+    event_service = EventService(repo=event_repo, cache=cache_repo, odds_repo=odds_repo)
 
     # Build a minimal enriched event and pre-populate the cache
     enriched = build_minimal_enriched(sport_group="Basketball")

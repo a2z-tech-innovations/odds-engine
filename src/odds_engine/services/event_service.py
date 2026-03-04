@@ -11,17 +11,20 @@ from odds_engine.schemas.enriched import EnrichedEventResponse
 from odds_engine.schemas.events import EventFilterParams
 
 if TYPE_CHECKING:
+    from odds_engine.models.odds import EnrichedSnapshot
     from odds_engine.repositories.cache_repo import CacheRepository
     from odds_engine.repositories.event_repo import EventRepository
+    from odds_engine.repositories.odds_repo import OddsRepository
 
 logger = get_logger(__name__)
 
 
-def _db_event_to_enriched(event) -> EnrichedEventResponse:
-    """Build a thin EnrichedEventResponse from an ORM Event with no odds data.
+def _db_event_to_enriched(event, enriched: EnrichedSnapshot | None = None) -> EnrichedEventResponse:
+    """Build an EnrichedEventResponse from an ORM Event.
 
-    Used as DB fallback when the Redis cache is cold. Odds fields are empty —
-    the consumer gets event metadata but no bookmaker data.
+    If an EnrichedSnapshot is provided, populates best_line/consensus/vig_free/movement
+    from the DB. bookmakers is always empty in the DB fallback path (not reconstructed
+    from raw bookmaker_odds rows).
     """
     return EnrichedEventResponse(
         event_id=event.external_id,
@@ -31,26 +34,29 @@ def _db_event_to_enriched(event) -> EnrichedEventResponse:
         away_team=event.away_team,
         commence_time=event.commence_time,
         status=event.status.value if hasattr(event.status, "value") else str(event.status),
-        snapshot_id=uuid.uuid4(),
-        fetched_at=event.updated_at,
+        snapshot_id=enriched.snapshot_id if enriched else uuid.uuid4(),
+        fetched_at=enriched.computed_at if enriched else event.updated_at,
         bookmakers={},
-        best_line={},
-        consensus={},
-        vig_free={},
-        movement={},
+        best_line=enriched.best_line if enriched else {},
+        consensus=enriched.consensus_line if enriched else {},
+        vig_free=enriched.vig_free if enriched else {},
+        movement=enriched.movement if enriched else {},
     )
 
 
 class EventService:
-    def __init__(self, repo: EventRepository, cache: CacheRepository) -> None:
+    def __init__(
+        self, repo: EventRepository, cache: CacheRepository, odds_repo: OddsRepository
+    ) -> None:
         self._repo = repo
         self._cache = cache
+        self._odds_repo = odds_repo
 
     async def get_events(self, filters: EventFilterParams) -> list[EnrichedEventResponse]:
         """Return enriched events, preferring cache when sport_group is specified.
 
         Cache path (sport_group set): returns full EnrichedEventResponse with all odds data.
-        DB fallback: returns thin EnrichedEventResponse with empty odds fields.
+        DB fallback: joins enriched_snapshots to populate best_line/consensus/vig_free/movement.
         Additional filters (sport_key, status, etc.) are applied client-side on cache results.
         """
         if filters.sport_group is not None:
@@ -74,13 +80,16 @@ class EventService:
 
         db_events = await self._repo.get_many(filters)
         logger.debug("events db query", count=len(db_events))
-        return [_db_event_to_enriched(e) for e in db_events]
+        enriched_map = await self._odds_repo.get_latest_enriched_bulk(
+            [e.id for e in db_events]
+        )
+        return [_db_event_to_enriched(e, enriched_map.get(e.id)) for e in db_events]
 
     async def get_event(self, event_id: str) -> EnrichedEventResponse:
         """Return a single enriched event by its external_id (Odds API ID string).
 
         Cache path: returns full EnrichedEventResponse with all odds data.
-        DB fallback: returns thin EnrichedEventResponse with empty odds fields.
+        DB fallback: joins enriched_snapshots to populate best_line/consensus/vig_free/movement.
         Raises EventNotFoundError if not found in cache or DB.
         """
         cached = await self._cache.get_event(event_id)
@@ -92,5 +101,6 @@ class EventService:
         if db_event is None:
             raise EventNotFoundError(event_id)
 
+        enriched = await self._odds_repo.get_latest_enriched(db_event.id)
         logger.debug("event db hit", event_id=event_id)
-        return _db_event_to_enriched(db_event)
+        return _db_event_to_enriched(db_event, enriched)

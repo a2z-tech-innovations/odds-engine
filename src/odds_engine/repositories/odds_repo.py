@@ -141,6 +141,25 @@ class OddsRepository:
             return 0
         return monthly_limit - int(min_remaining)
 
+    async def get_latest_enriched_bulk(
+        self, event_ids: list[uuid.UUID]
+    ) -> dict[uuid.UUID, EnrichedSnapshot]:
+        """Return the most recent EnrichedSnapshot per event for a list of event IDs.
+
+        Returns a dict keyed by event_id. Events with no enriched snapshot are omitted.
+        Uses DISTINCT ON (event_id) ordered by computed_at DESC — single query.
+        """
+        if not event_ids:
+            return {}
+        stmt = (
+            select(EnrichedSnapshot)
+            .where(EnrichedSnapshot.event_id.in_(event_ids))
+            .distinct(EnrichedSnapshot.event_id)
+            .order_by(EnrichedSnapshot.event_id, EnrichedSnapshot.computed_at.desc())
+        )
+        result = await self._session.execute(stmt)
+        return {row.event_id: row for row in result.scalars().all()}
+
     async def get_last_fetch_time(self) -> datetime | None:
         """Return the recorded_at timestamp of the most recent api_usage row, or None."""
         stmt = select(func.max(ApiUsage.recorded_at))

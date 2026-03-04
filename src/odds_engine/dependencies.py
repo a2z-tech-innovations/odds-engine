@@ -58,8 +58,9 @@ async def get_publisher(cache: CacheRepository = Depends(get_cache_repo)) -> Odd
 async def get_event_service(
     repo: EventRepository = Depends(get_event_repo),
     cache: CacheRepository = Depends(get_cache_repo),
+    odds_repo: OddsRepository = Depends(get_odds_repo),
 ) -> EventService:
-    return EventService(repo=repo, cache=cache)
+    return EventService(repo=repo, cache=cache, odds_repo=odds_repo)
 
 
 async def get_odds_service(
