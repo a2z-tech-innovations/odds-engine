@@ -48,10 +48,14 @@ async def health_check(
     except Exception:
         redis_status = "error"
 
+    last_fetch_at: str | None = None
     with contextlib.suppress(Exception):
         daily = await odds_repo.get_daily_credits_used()
         monthly = await odds_repo.get_actual_monthly_credits_used(monthly_limit)
         budget = {"daily_used": daily, "monthly_used": monthly, "monthly_limit": monthly_limit}
+        ts = await odds_repo.get_last_fetch_time()
+        if ts is not None:
+            last_fetch_at = ts.isoformat()
 
     overall = "ok" if db_status == "ok" and redis_status == "ok" else "degraded"
 
@@ -60,5 +64,6 @@ async def health_check(
         "database": db_status,
         "redis": redis_status,
         "budget": budget,
+        "last_fetch_at": last_fetch_at,
         "version": request.app.version,
     }

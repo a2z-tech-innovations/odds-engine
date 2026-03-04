@@ -139,7 +139,7 @@ X-API-Key: <api_secret_key>
 WebSocket requires `api_key` query param:
 
 ```
-ws://host/api/v1/ws?api_key=<secret>&sport_group=Basketball
+ws://host/api/v1/ws?api_key=<secret>&sport_group=ATP
 ```
 
 ### REST Endpoints
@@ -157,6 +157,7 @@ No auth required.
     "monthly_used": 28,
     "monthly_limit": 500
   },
+  "last_fetch_at": "2026-03-04T14:32:00+00:00",
   "version": "0.1.0"
 }
 ```
@@ -204,7 +205,7 @@ Auth required. Triggers manual odds fetch (respects budget limits).
 ### WebSocket
 
 ```
-WS /api/v1/ws?api_key=<secret>[&sport_group=Basketball]
+WS /api/v1/ws?api_key=<secret>[&sport_group=ATP]
 ```
 
 - On connect: immediately receives current cached events as individual JSON messages
@@ -284,6 +285,7 @@ class HealthResponse(BaseModel):
     database: str
     redis: str
     budget: "BudgetResponse"
+    last_fetch_at: datetime | None = None
     version: str
 
 
@@ -295,17 +297,38 @@ class BudgetResponse(BaseModel):
 
 ### Market / Outcome Keys
 
+**Tennis / Basketball (ATP, WTA, NCAAB):**
 - Markets: `h2h`, `spreads`, `totals`
 - `best_line["h2h"]["Home Team"]` → `BestLineOutcome(price=-150, bookmaker="draftkings")`
 - `consensus["spreads"]["Home Team"]` → `ConsensusOutcome(price=-110)`
 - `vig_free["h2h"]["Home Team"]` → `VigFreeOutcome(implied_prob=0.585)`
 - `movement["h2h"]["Home Team"]` → `MovementOutcome(price_delta=-5, previous_price=-145)`
-- Prices are American odds (e.g., `-150`, `+130`, `-110`)
+
+**Golf (outrights):**
+- Market: `outrights` only — no `h2h`, `spreads`, or `totals`
+- Outcome names are player names (e.g., `"Scottie Scheffler"`, `"Rory McIlroy"`)
+- `best_line["outrights"]["Scottie Scheffler"]` → `BestLineOutcome(price=+600, bookmaker="fanduel")`
+- `vig_free["outrights"]["Scottie Scheffler"]` → `VigFreeOutcome(implied_prob=0.143)`
+- `movement` is typically empty for golf (no previous snapshot on first fetch)
+- `home_team` and `away_team` both equal the tournament name (e.g., `"Masters Tournament"`)
+
+**Prices are American odds** (e.g., `-150`, `+130`, `-110`, `+600`).
 
 ### Sport Groups
 
-- `"Tennis"` — includes ATP and WTA tournaments
-- `"Basketball"` — NCAAB
+The backend derives sport groups from the sport key using a canonical mapping:
+
+| `sport_group` | `sport_key` pattern | Notes |
+|---|---|---|
+| `"ATP"` | `tennis_atp_*` | Varies by tournament (e.g., `tennis_atp_indian_wells`) |
+| `"WTA"` | `tennis_wta_*` | Varies by tournament |
+| `"Golf"` | `golf_*` | e.g., `golf_masters_tournament_winner` |
+| `"NCAAB"` | `basketball_ncaab` | College basketball |
+| `"NBA"` | `basketball_nba` | Not currently targeted but mapped |
+
+Use these exact strings in `?sport_group=` query params and WebSocket filter.
+
+**Golf note**: Golf events are outrights (tournament winner markets). `home_team` and `away_team` are both set to the `sport_title` (e.g., `"Masters Tournament"`) since there are no matchup participants. The `best_line`, `consensus`, and `vig_free` use the market key `"outrights"` instead of `"h2h"`. Movement and spreads/totals are not present.
 
 ---
 
@@ -317,7 +340,7 @@ class BudgetResponse(BaseModel):
 ┌─────────────────────────────────────────────────────┐
 │  Bookie Genie                    Budget: 28/500 ███░ │
 ├──────────────────────────────────────────────────────┤
-│  [Tennis]  [Basketball]  [All]                       │
+│  [ATP]  [WTA]  [Golf]  [NCAAB]  [All]                │
 ├──────────────────────────────────────────────────────┤
 │  MATCHUP              STATUS   H2H BEST    CONSENSUS │
 │  Djokovic vs Alcaraz  upcoming  -145 DK    -148 avg  │
@@ -500,10 +523,14 @@ Same workflow as the Odds Engine:
 ### Fixtures
 
 Create `tests/fixtures/` with captured API JSON responses:
-- `events_basketball.json` — `list[EnrichedEventResponse]`
-- `events_tennis.json` — `list[EnrichedEventResponse]`
+- `events_atp.json` — `list[EnrichedEventResponse]` (tennis ATP, h2h/spreads/totals)
+- `events_wta.json` — `list[EnrichedEventResponse]` (tennis WTA, h2h/spreads/totals)
+- `events_golf.json` — `list[EnrichedEventResponse]` (golf outrights, player names as outcomes)
+- `events_ncaab.json` — `list[EnrichedEventResponse]` (college basketball)
 - `health.json` — `HealthResponse`
 - `budget.json` — `BudgetResponse`
+
+Capture these by calling the running Odds Engine at `GET /api/v1/events?sport_group=ATP` etc. Golf fixtures should demonstrate the `outrights` market key and `home_team == away_team == sport_title` pattern.
 
 Use `respx` to mount these as mock responses in unit/UI tests.
 
@@ -599,3 +626,5 @@ filterwarnings = ["ignore::DeprecationWarning"]
 - Implied probability from `vig_free`: display as percentage, two decimal places
 - Times in local timezone, derived from `commence_time` (UTC)
 - Status colors: `upcoming` → dim white, `live` → bold green, `completed` → dim grey
+- **Golf rendering**: The matchup column shows the tournament name (from `home_team`/`away_team`) since there are no competing teams. The odds panel shows player names as outcomes under the `outrights` market. Skip spreads/totals tabs for golf events (check `"outrights" in event.best_line`).
+- **Sport group tabs** drive the WebSocket filter and REST query param. The active tab should match one of: `ATP`, `WTA`, `Golf`, `NCAAB`, or show all if no filter.
