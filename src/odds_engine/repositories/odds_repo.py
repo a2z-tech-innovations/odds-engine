@@ -127,6 +127,26 @@ class OddsRepository:
         result = await self._session.execute(stmt)
         return int(result.scalar_one())
 
+    async def get_actual_monthly_credits_used(self, monthly_limit: int = 500) -> int:
+        """Derive actual monthly usage from the lowest credits_remaining ever recorded.
+
+        Uses monthly_limit - min(credits_remaining) so we reflect what the Odds API
+        actually charged, including any credits spent before this DB was set up.
+        Falls back to summing credits_used if no api_usage rows exist.
+        """
+        stmt = select(func.min(ApiUsage.credits_remaining))
+        result = await self._session.execute(stmt)
+        min_remaining = result.scalar_one()
+        if min_remaining is None:
+            return 0
+        return monthly_limit - int(min_remaining)
+
+    async def get_last_fetch_time(self) -> datetime | None:
+        """Return the recorded_at timestamp of the most recent api_usage row, or None."""
+        stmt = select(func.max(ApiUsage.recorded_at))
+        result = await self._session.execute(stmt)
+        return result.scalar_one()
+
     async def record_api_usage(
         self,
         credits_used: int,

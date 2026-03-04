@@ -1,5 +1,6 @@
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
+from datetime import UTC, datetime
 
 import httpx
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -118,11 +119,9 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
                         log.error("scheduler.fetch_error", sport_key=sport_key, error=str(exc))
 
         async def _warm_cache() -> None:
-            """On startup, load the latest enriched snapshots from DB into Redis.
-
-            This avoids a cold cache after a restart without spending API credits.
-            """
+            """Load the latest enriched snapshots from DB into Redis (no API call)."""
             from odds_engine.repositories.event_repo import EventRepository as ER
+            from odds_engine.schemas.enriched import EnrichedEventResponse
             from odds_engine.schemas.events import EventFilterParams
 
             async with app.state.session_factory() as session:
@@ -131,13 +130,12 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
                 publisher = OddsPublisher(_cache_repo)
 
                 db_events = await event_repo.get_many(EventFilterParams(), limit=500)
-                warmed = 0
+                enriched_events: list[EnrichedEventResponse] = []
                 for db_event in db_events:
                     enriched_snap = await odds_repo.get_latest_enriched(db_event.id)
                     if enriched_snap is None:
                         continue
-                    from odds_engine.schemas.enriched import EnrichedEventResponse
-                    enriched = EnrichedEventResponse(
+                    enriched_events.append(EnrichedEventResponse(
                         event_id=db_event.external_id,
                         sport_key=db_event.sport_key,
                         sport_group=db_event.sport_group,
@@ -147,16 +145,31 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
                         status=db_event.status.value if hasattr(db_event.status, "value") else str(db_event.status),
                         snapshot_id=enriched_snap.snapshot_id,
                         fetched_at=enriched_snap.computed_at,
-                        bookmakers={},  # not stored denormalized — consumers use best_line
+                        bookmakers={},
                         best_line=enriched_snap.best_line,
                         consensus=enriched_snap.consensus_line,
                         vig_free=enriched_snap.vig_free,
                         movement=enriched_snap.movement,
-                    )
-                    await publisher.publish(enriched)
-                    warmed += 1
+                    ))
 
-            log.info("cache.warmed", events=warmed)
+                await publisher.publish_batch(enriched_events)
+
+            log.info("cache.warmed", events=len(enriched_events))
+
+        async def _startup_job() -> None:
+            """On startup: always warm cache from DB, then fetch fresh odds if > 4 hours stale."""
+            from datetime import timedelta
+
+            await _warm_cache()
+
+            async with app.state.session_factory() as session:
+                last_fetch = await OddsRepository(session).get_last_fetch_time()
+
+            if last_fetch is None or (datetime.now(UTC) - last_fetch) > timedelta(hours=4):
+                log.info("startup.data_stale_fetching", last_fetch=str(last_fetch))
+                await _fetch_job()
+            else:
+                log.info("startup.data_fresh", last_fetch=str(last_fetch))
 
         from apscheduler.triggers.cron import CronTrigger
 
@@ -171,7 +184,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
             id="daily_fetch",
             max_instances=1,
         )
-        scheduler.add_job(_warm_cache, "date", id="startup_cache_warm")
+        scheduler.add_job(_startup_job, "date", id="startup_job")
         scheduler.start()
         app.state.scheduler = scheduler
         log.info(

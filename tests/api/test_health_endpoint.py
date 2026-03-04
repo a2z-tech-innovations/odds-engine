@@ -20,7 +20,7 @@ def mock_cache_repo(app):
 def mock_odds_repo(app):
     repo = AsyncMock()
     repo.get_daily_credits_used = AsyncMock(return_value=0)
-    repo.get_monthly_credits_used = AsyncMock(return_value=0)
+    repo.get_actual_monthly_credits_used = AsyncMock(return_value=0)
     app.dependency_overrides[get_odds_repo] = lambda: repo
     yield repo
     app.dependency_overrides.pop(get_odds_repo, None)
@@ -34,7 +34,7 @@ def mock_odds_repo(app):
 async def test_health_returns_ok_structure(client: AsyncClient, mock_cache_repo, mock_odds_repo):
     mock_cache_repo.redis.ping = AsyncMock()
     mock_odds_repo.get_daily_credits_used = AsyncMock(return_value=9)
-    mock_odds_repo.get_monthly_credits_used = AsyncMock(return_value=9)
+    mock_odds_repo.get_actual_monthly_credits_used = AsyncMock(return_value=28)
 
     response = await client.get("/api/v1/health")
 
@@ -50,7 +50,7 @@ async def test_health_returns_ok_structure(client: AsyncClient, mock_cache_repo,
 async def test_health_includes_budget_data(client: AsyncClient, mock_cache_repo, mock_odds_repo):
     mock_cache_repo.redis.ping = AsyncMock()
     mock_odds_repo.get_daily_credits_used = AsyncMock(return_value=15)
-    mock_odds_repo.get_monthly_credits_used = AsyncMock(return_value=42)
+    mock_odds_repo.get_actual_monthly_credits_used = AsyncMock(return_value=42)
 
     response = await client.get("/api/v1/health")
 
@@ -73,7 +73,7 @@ async def test_health_no_auth_required(app):
 async def test_health_degraded_when_redis_down(client: AsyncClient, mock_cache_repo, mock_odds_repo):
     mock_cache_repo.redis.ping = AsyncMock(side_effect=Exception("Redis down"))
     mock_odds_repo.get_daily_credits_used = AsyncMock(return_value=0)
-    mock_odds_repo.get_monthly_credits_used = AsyncMock(return_value=0)
+    mock_odds_repo.get_actual_monthly_credits_used = AsyncMock(return_value=0)
 
     response = await client.get("/api/v1/health")
 
@@ -90,7 +90,7 @@ async def test_health_degraded_when_redis_down(client: AsyncClient, mock_cache_r
 
 async def test_budget_returns_credit_usage_from_db(client: AsyncClient, mock_odds_repo):
     mock_odds_repo.get_daily_credits_used = AsyncMock(return_value=9)
-    mock_odds_repo.get_monthly_credits_used = AsyncMock(return_value=28)
+    mock_odds_repo.get_actual_monthly_credits_used = AsyncMock(return_value=28)
 
     response = await client.get("/api/v1/budget")
 
