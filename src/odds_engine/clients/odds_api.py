@@ -85,7 +85,6 @@ class OddsAPIClient:
             bookmakers = ["draftkings", "fanduel", "betmgm", "caesars", "bovada", "betonlineag"]
 
         params = {
-            "regions": "us",
             "markets": ",".join(markets),
             "bookmakers": ",".join(bookmakers),
             "oddsFormat": "american",

@@ -151,8 +151,8 @@ async def test_get_odds_returns_events_and_usage() -> None:
     assert "/sports/basketball_ncaab/odds" in call_kwargs.args[0]
     params = call_kwargs.kwargs["params"]
     assert params["oddsFormat"] == "american"
-    assert params["regions"] == "us"
     assert "h2h" in params["markets"]
+    assert "regions" not in params
 
 
 @pytest.mark.asyncio
