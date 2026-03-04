@@ -36,8 +36,8 @@ class OddsAPIEvent(BaseModel):
     id: str
     sport_key: str
     sport_title: str
-    home_team: str
-    away_team: str
+    home_team: str | None = None
+    away_team: str | None = None
     commence_time: datetime
     bookmakers: list[OddsAPIBookmaker] = []
 

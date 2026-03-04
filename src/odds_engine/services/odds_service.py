@@ -11,6 +11,7 @@ from odds_engine.exceptions import BudgetExhaustedError  # noqa: F401 — re-exp
 from odds_engine.logging import get_logger
 from odds_engine.schemas.odds import ManualFetchResponse
 from odds_engine.services.enrichment import build_enriched_event
+from odds_engine.sport_groups import markets_for_sport
 
 if TYPE_CHECKING:
     from odds_engine.clients.odds_api import OddsAPIClient
@@ -60,7 +61,7 @@ class OddsService:
         """
         logger.debug("starting fetch_and_store", sport_key=sport_key)
 
-        api_events, usage = await self._client.get_odds(sport_key)
+        api_events, usage = await self._client.get_odds(sport_key, markets=markets_for_sport(sport_key))
 
         if not api_events:
             logger.debug("no events returned from API", sport_key=sport_key)
@@ -84,8 +85,8 @@ class OddsService:
                 external_id=api_event.id,
                 sport_key=api_event.sport_key,
                 sport_group=sport_group,
-                home_team=api_event.home_team,
-                away_team=api_event.away_team,
+                home_team=api_event.home_team or api_event.sport_title,
+                away_team=api_event.away_team or api_event.sport_title,
                 commence_time=api_event.commence_time,
                 status="upcoming",
             )

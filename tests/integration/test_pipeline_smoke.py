@@ -269,7 +269,7 @@ async def test_full_pipeline_ncaab(db_session, redis_client):
     # Step 7: verify active events list from cache
     active = await cache_repo.get_active_events("Basketball")
     assert active is not None
-    assert len(active) == 1  # last set_active_events call had 1 event
+    assert len(active) >= 1  # events are merged into the active list
     print(f"  Active events cache OK — {len(active)} event(s) cached")
 
     # Step 8: verify budget tracking

@@ -13,16 +13,9 @@ from odds_engine.config import Settings, get_settings
 from odds_engine.exceptions import BudgetExhaustedError, EventNotFoundError, OddsAPIError
 from odds_engine.logging import configure_logging, get_logger
 from odds_engine.models.database import create_engine, create_session_factory
+from odds_engine.sport_groups import sport_group as _sport_group
 
 logger = get_logger(__name__)
-
-
-def _sport_group(sport_key: str) -> str:
-    if sport_key.startswith(("tennis_atp_", "tennis_wta_")):
-        return "Tennis"
-    if sport_key.startswith("basketball_"):
-        return "Basketball"
-    return sport_key.split("_")[0].title()
 
 
 @asynccontextmanager

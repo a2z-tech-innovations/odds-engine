@@ -61,10 +61,14 @@ class CacheRepository:
     async def set_active_events(
         self, sport_group: str, events: list[EnrichedEventResponse], ttl: int = 300
     ) -> None:
-        """SET events:{sport_group}:active <json array> EX ttl."""
+        """Merge events into events:{sport_group}:active, keyed by event_id. EX ttl."""
         import json
 
-        payload = json.dumps([json.loads(e.model_dump_json()) for e in events])
+        existing = await self.get_active_events(sport_group) or []
+        merged = {e.event_id: e for e in existing}
+        for e in events:
+            merged[e.event_id] = e
+        payload = json.dumps([json.loads(e.model_dump_json()) for e in merged.values()])
         await self.redis.set(f"events:{sport_group}:active", payload, ex=ttl)
 
     # --- Sports cache ---

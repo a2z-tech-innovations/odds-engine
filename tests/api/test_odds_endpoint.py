@@ -103,18 +103,9 @@ async def test_post_fetch_returns_429_on_budget_exhausted(
     assert response.status_code == 429
 
 
-async def test_post_fetch_derives_sport_group_from_cache(
-    client: AsyncClient, mock_odds_service, mock_cache_repo
+async def test_post_fetch_uses_canonical_sport_group(
+    client: AsyncClient, mock_odds_service
 ):
-    sport = OddsAPISport(
-        key="basketball_ncaab",
-        group="Basketball",
-        title="NCAAB",
-        description="College Basketball",
-        active=True,
-        has_outrights=False,
-    )
-    mock_cache_repo.get_active_sports.return_value = [sport]
     mock_odds_service.fetch_and_store.return_value = ManualFetchResponse(
         sport_key="basketball_ncaab",
         events_fetched=2,
@@ -127,7 +118,7 @@ async def test_post_fetch_derives_sport_group_from_cache(
     )
 
     assert response.status_code == 200
-    mock_odds_service.fetch_and_store.assert_called_once_with("basketball_ncaab", "Basketball")
+    mock_odds_service.fetch_and_store.assert_called_once_with("basketball_ncaab", "NCAAB")
 
 
 # ---------------------------------------------------------------------------

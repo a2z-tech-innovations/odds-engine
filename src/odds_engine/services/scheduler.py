@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 log = structlog.get_logger(__name__)
 
 # Sport key prefixes / exact keys we care about
-_TARGET_PREFIXES = ("tennis_atp_", "tennis_wta_")
+_TARGET_PREFIXES = ("tennis_atp_", "tennis_wta_", "golf_")
 _TARGET_EXACT = frozenset({"basketball_ncaab"})
 
 

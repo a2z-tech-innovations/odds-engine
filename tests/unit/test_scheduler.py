@@ -186,6 +186,7 @@ class TestSportDiscovery:
             assert (
                 key.startswith("tennis_atp_")
                 or key.startswith("tennis_wta_")
+                or key.startswith("golf_")
                 or key == "basketball_ncaab"
             ), f"Unexpected sport key returned: {key}"
 
@@ -193,6 +194,7 @@ class TestSportDiscovery:
         assert "tennis_atp_indian_wells" in result
         assert "tennis_wta_indian_wells" in result
         assert "basketball_ncaab" in result
+        assert "golf_masters_tournament_winner" in result
 
         # Non-target sports must not appear
         assert "soccer_epl" not in result
