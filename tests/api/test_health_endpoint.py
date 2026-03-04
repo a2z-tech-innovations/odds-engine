@@ -5,7 +5,7 @@ from unittest.mock import AsyncMock
 import pytest
 from httpx import ASGITransport, AsyncClient
 
-from odds_engine.dependencies import get_cache_repo
+from odds_engine.dependencies import get_cache_repo, get_odds_repo
 
 
 @pytest.fixture
@@ -16,14 +16,25 @@ def mock_cache_repo(app):
     app.dependency_overrides.pop(get_cache_repo, None)
 
 
+@pytest.fixture
+def mock_odds_repo(app):
+    repo = AsyncMock()
+    repo.get_daily_credits_used = AsyncMock(return_value=0)
+    repo.get_monthly_credits_used = AsyncMock(return_value=0)
+    app.dependency_overrides[get_odds_repo] = lambda: repo
+    yield repo
+    app.dependency_overrides.pop(get_odds_repo, None)
+
+
 # ---------------------------------------------------------------------------
 # GET /api/v1/health
 # ---------------------------------------------------------------------------
 
 
-async def test_health_returns_ok_structure(client: AsyncClient, mock_cache_repo):
+async def test_health_returns_ok_structure(client: AsyncClient, mock_cache_repo, mock_odds_repo):
     mock_cache_repo.redis.ping = AsyncMock()
-    mock_cache_repo.get_budget = AsyncMock(return_value={"daily_used": 9, "monthly_used": 9})
+    mock_odds_repo.get_daily_credits_used = AsyncMock(return_value=9)
+    mock_odds_repo.get_monthly_credits_used = AsyncMock(return_value=9)
 
     response = await client.get("/api/v1/health")
 
@@ -36,11 +47,10 @@ async def test_health_returns_ok_structure(client: AsyncClient, mock_cache_repo)
     assert "version" in data
 
 
-async def test_health_includes_budget_data(client: AsyncClient, mock_cache_repo):
+async def test_health_includes_budget_data(client: AsyncClient, mock_cache_repo, mock_odds_repo):
     mock_cache_repo.redis.ping = AsyncMock()
-    mock_cache_repo.get_budget = AsyncMock(
-        return_value={"daily_used": 15, "monthly_used": 42}
-    )
+    mock_odds_repo.get_daily_credits_used = AsyncMock(return_value=15)
+    mock_odds_repo.get_monthly_credits_used = AsyncMock(return_value=42)
 
     response = await client.get("/api/v1/health")
 
@@ -60,9 +70,10 @@ async def test_health_no_auth_required(app):
     assert response.status_code == 200
 
 
-async def test_health_degraded_when_redis_down(client: AsyncClient, mock_cache_repo):
+async def test_health_degraded_when_redis_down(client: AsyncClient, mock_cache_repo, mock_odds_repo):
     mock_cache_repo.redis.ping = AsyncMock(side_effect=Exception("Redis down"))
-    mock_cache_repo.get_budget = AsyncMock(return_value={"daily_used": 0, "monthly_used": 0})
+    mock_odds_repo.get_daily_credits_used = AsyncMock(return_value=0)
+    mock_odds_repo.get_monthly_credits_used = AsyncMock(return_value=0)
 
     response = await client.get("/api/v1/health")
 
@@ -77,17 +88,16 @@ async def test_health_degraded_when_redis_down(client: AsyncClient, mock_cache_r
 # ---------------------------------------------------------------------------
 
 
-async def test_budget_returns_credit_usage(client: AsyncClient, mock_cache_repo):
-    mock_cache_repo.get_budget = AsyncMock(
-        return_value={"daily_used": 9, "monthly_used": 9}
-    )
+async def test_budget_returns_credit_usage_from_db(client: AsyncClient, mock_odds_repo):
+    mock_odds_repo.get_daily_credits_used = AsyncMock(return_value=9)
+    mock_odds_repo.get_monthly_credits_used = AsyncMock(return_value=28)
 
     response = await client.get("/api/v1/budget")
 
     assert response.status_code == 200
     data = response.json()
     assert data["daily_used"] == 9
-    assert data["monthly_used"] == 9
+    assert data["monthly_used"] == 28
 
 
 async def test_budget_requires_auth(app):

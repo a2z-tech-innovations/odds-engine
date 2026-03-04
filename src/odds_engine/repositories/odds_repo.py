@@ -1,9 +1,9 @@
 """Repository for OddsSnapshot, BookmakerOdds, EnrichedSnapshot, and ApiUsage persistence."""
 
 import uuid
-from datetime import datetime
+from datetime import UTC, datetime
 
-from sqlalchemy import insert, select
+from sqlalchemy import func, insert, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from odds_engine.models.odds import ApiUsage, BookmakerOdds, EnrichedSnapshot, OddsSnapshot
@@ -106,6 +106,26 @@ class OddsRepository:
         )
         result = await self._session.execute(stmt)
         return list(result.scalars().all())
+
+    async def get_monthly_credits_used(self) -> int:
+        """Sum credits_used from api_usage for the current calendar month (UTC)."""
+        now = datetime.now(UTC)
+        month_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        stmt = select(func.coalesce(func.sum(ApiUsage.credits_used), 0)).where(
+            ApiUsage.recorded_at >= month_start
+        )
+        result = await self._session.execute(stmt)
+        return int(result.scalar_one())
+
+    async def get_daily_credits_used(self) -> int:
+        """Sum credits_used from api_usage for today (UTC)."""
+        now = datetime.now(UTC)
+        day_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        stmt = select(func.coalesce(func.sum(ApiUsage.credits_used), 0)).where(
+            ApiUsage.recorded_at >= day_start
+        )
+        result = await self._session.execute(stmt)
+        return int(result.scalar_one())
 
     async def record_api_usage(
         self,
