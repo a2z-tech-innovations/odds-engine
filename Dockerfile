@@ -6,5 +6,5 @@ RUN uv sync --frozen --no-dev
 COPY alembic/ alembic/
 COPY alembic.ini .
 COPY src/ src/
-EXPOSE 8000
-CMD ["sh", "-c", "uv run alembic upgrade head && uv run uvicorn odds_engine.main:app --host 0.0.0.0 --port 8000"]
+EXPOSE 7432
+CMD ["sh", "-c", "uv run alembic upgrade head && uv run uvicorn odds_engine.main:app --host 0.0.0.0 --port 7432"]
