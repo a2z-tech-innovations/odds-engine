@@ -141,6 +141,10 @@ class OddsService:
             # g. Serialize to plain dicts (CRITICAL: use json.loads(model_dump_json()))
             enriched_plain = json.loads(enriched.model_dump_json())
 
+            # g2. Persist opening line on first fetch (no previous enriched snapshot)
+            if previous_enriched is None:
+                await self._event_repo.set_opening_line(db_event.id, enriched_plain["best_line"])
+
             # h. Persist enriched snapshot
             await self._odds_repo.create_enriched_snapshot(
                 snapshot_id=snapshot.id,

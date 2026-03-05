@@ -140,6 +140,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
                         fetched_at=enriched_snap.computed_at,
                         bookmakers=enriched_snap.bookmakers,
                         best_line=enriched_snap.best_line,
+                        opening_line=db_event.opening_line,
                         consensus=enriched_snap.consensus_line,
                         vig_free=enriched_snap.vig_free,
                         movement=enriched_snap.movement,

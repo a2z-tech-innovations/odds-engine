@@ -69,6 +69,7 @@ class EnrichedEventResponse(BaseModel):
     fetched_at: datetime
     bookmakers: dict[str, dict[str, EnrichedBookmakerMarket]]
     best_line: dict[str, dict[str, BestLineOutcome]]
+    opening_line: dict[str, dict[str, BestLineOutcome]] = {}
     consensus: dict[str, dict[str, ConsensusOutcome]]
     vig_free: dict[str, dict[str, VigFreeOutcome]]
     movement: dict[str, dict[str, MovementOutcome]]

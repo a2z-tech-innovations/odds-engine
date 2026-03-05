@@ -3,7 +3,7 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import func, select
+from sqlalchemy import func, select, update
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -56,6 +56,15 @@ class EventRepository:
         result = await self._session.execute(stmt)
         row = result.scalar_one()
         return row
+
+    async def set_opening_line(self, event_id: uuid.UUID, best_line: dict) -> None:
+        """Set opening_line only if it has not been set yet (first fetch guard)."""
+        stmt = (
+            update(Event)
+            .where(Event.id == event_id, Event.opening_line == {})
+            .values(opening_line=best_line)
+        )
+        await self._session.execute(stmt)
 
     async def get_by_external_id(self, external_id: str) -> Event | None:
         """Fetch an event by its Odds API external_id."""

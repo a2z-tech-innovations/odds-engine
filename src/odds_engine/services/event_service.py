@@ -38,6 +38,7 @@ def _db_event_to_enriched(event, enriched: EnrichedSnapshot | None = None) -> En
         fetched_at=enriched.computed_at if enriched else event.updated_at,
         bookmakers=enriched.bookmakers if enriched else {},
         best_line=enriched.best_line if enriched else {},
+        opening_line=event.opening_line if hasattr(event, "opening_line") else {},
         consensus=enriched.consensus_line if enriched else {},
         vig_free=enriched.vig_free if enriched else {},
         movement=enriched.movement if enriched else {},

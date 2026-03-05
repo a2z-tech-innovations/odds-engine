@@ -51,6 +51,7 @@ def make_db_event(external_id: str = "ext1", sport_group: str = "Basketball") ->
     event.away_team = "Team B"
     event.commence_time = datetime(2026, 3, 10, 19, 0, tzinfo=UTC)
     event.status = EventStatus.upcoming
+    event.opening_line = {}
     event.created_at = datetime(2026, 3, 3, 12, 0, tzinfo=UTC)
     event.updated_at = datetime(2026, 3, 3, 12, 0, tzinfo=UTC)
     return event

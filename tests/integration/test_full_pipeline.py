@@ -360,7 +360,54 @@ async def test_event_service_cache_first(db_session, redis_client):
 
 
 # ---------------------------------------------------------------------------
-# Test 6: budget tracking accumulates across two fetches
+# Test 6a: opening_line set on first fetch, preserved on second fetch
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+async def test_opening_line_set_on_first_fetch_only(db_session, redis_client):
+    """opening_line is written on the first fetch and never overwritten."""
+    import copy
+
+    api_events = load_odds_fixture("odds_basketball_ncaab.json")
+    mock_client = make_mock_client(api_events, credits_used=3, credits_remaining=491)
+
+    event_repo = EventRepository(db_session)
+    odds_repo = OddsRepository(db_session)
+    cache_repo = CacheRepository(redis_client)
+    publisher = OddsPublisher(cache_repo)
+    odds_service = OddsService(
+        client=mock_client,
+        event_repo=event_repo,
+        odds_repo=odds_repo,
+        cache=cache_repo,
+        publisher=publisher,
+    )
+
+    # First fetch — opening_line should be written
+    await odds_service.fetch_and_store(sport_key="basketball_ncaab", sport_group="NCAAB")
+    await db_session.flush()
+
+    first_api_event = api_events[0]
+    db_event = await event_repo.get_by_external_id(first_api_event.id)
+    assert db_event is not None
+    assert db_event.opening_line != {}, "opening_line should be set after first fetch"
+    opening_line_after_first = copy.deepcopy(db_event.opening_line)
+
+    # Second fetch — same mock data, opening_line must not change
+    await odds_service.fetch_and_store(sport_key="basketball_ncaab", sport_group="NCAAB")
+    await db_session.flush()
+
+    await db_session.refresh(db_event)
+    assert db_event.opening_line == opening_line_after_first, (
+        "opening_line must not be overwritten on second fetch"
+    )
+
+    print(f"\n  Opening line OK — markets: {list(opening_line_after_first.keys())}")
+
+
+# ---------------------------------------------------------------------------
+# Test 7: budget tracking accumulates across two fetches
 # ---------------------------------------------------------------------------
 
 

@@ -1,7 +1,7 @@
 import uuid
 
 from sqlalchemy import DateTime, Index, String, func
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
 from odds_engine.models.database import Base
@@ -20,6 +20,7 @@ class Event(Base):
     away_team: Mapped[str] = mapped_column(String, nullable=False)
     commence_time: Mapped[DateTime] = mapped_column(DateTime(timezone=True), nullable=False)
     status: Mapped[str] = mapped_column(String, nullable=False, default="upcoming")
+    opening_line: Mapped[dict] = mapped_column(JSONB, nullable=False, server_default="{}")
     created_at: Mapped[DateTime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )
