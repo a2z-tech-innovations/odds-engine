@@ -138,7 +138,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
                         status=db_event.status.value if hasattr(db_event.status, "value") else str(db_event.status),
                         snapshot_id=enriched_snap.snapshot_id,
                         fetched_at=enriched_snap.computed_at,
-                        bookmakers={},
+                        bookmakers=enriched_snap.bookmakers,
                         best_line=enriched_snap.best_line,
                         consensus=enriched_snap.consensus_line,
                         vig_free=enriched_snap.vig_free,

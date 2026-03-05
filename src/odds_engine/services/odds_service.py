@@ -149,6 +149,7 @@ class OddsService:
                 consensus_line=enriched_plain["consensus"],
                 vig_free=enriched_plain["vig_free"],
                 movement=enriched_plain["movement"],
+                bookmakers=enriched_plain["bookmakers"],
             )
 
             enriched_events.append(enriched)

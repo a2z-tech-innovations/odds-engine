@@ -48,6 +48,7 @@ class OddsRepository:
         consensus_line: dict,
         vig_free: dict,
         movement: dict,
+        bookmakers: dict | None = None,
     ) -> EnrichedSnapshot:
         """Persist an EnrichedSnapshot and return the ORM instance."""
         enriched = EnrichedSnapshot(
@@ -58,6 +59,7 @@ class OddsRepository:
             consensus_line=consensus_line,
             vig_free=vig_free,
             movement=movement,
+            bookmakers=bookmakers or {},
         )
         self._session.add(enriched)
         await self._session.flush([enriched])

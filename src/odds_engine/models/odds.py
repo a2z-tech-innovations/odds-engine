@@ -63,6 +63,7 @@ class EnrichedSnapshot(Base):
     consensus_line: Mapped[dict] = mapped_column(JSONB, nullable=False)
     vig_free: Mapped[dict] = mapped_column(JSONB, nullable=False)
     movement: Mapped[dict] = mapped_column(JSONB, nullable=False)
+    bookmakers: Mapped[dict] = mapped_column(JSONB, nullable=False, server_default="{}")
     computed_at: Mapped[DateTime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )
